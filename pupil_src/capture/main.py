@@ -12,8 +12,8 @@ See COPYING and COPYING.LESSER for license details.
 import os, sys, platform
 
 # sys.argv.append('profiled')
-sys.argv.append('debug')
-# sys.argv.append('service')
+#sys.argv.append('debug')
+sys.argv.append('service')
 
 app = 'capture'
 
@@ -211,6 +211,12 @@ def launcher():
                             user_dir,
                             app_version
                             )).start()
+        #TODO  move eyetracker to service and pass g_pool
+        Process(target=eyetracker,
+                 name= 'eyetracker',
+                 args=(None,
+                       )).start()
+
     else:
         Process(target=world,
                       name= 'world',
@@ -226,7 +232,7 @@ def launcher():
         print(ipc_sub_url)
         Process(target=eyetracker,
                  name= 'eyetracker',
-                 args=(ipc_sub_url,
+                 args=(None,
                        )).start()
 
 
