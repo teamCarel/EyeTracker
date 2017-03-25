@@ -1,36 +1,28 @@
-2017-03-16 15:17:36,242 - MainProcess - [INFO] os_utils: Disabling idle sleep not supported on this OS version.
-2017-03-16 15:17:36,560 - world - [INFO] world: Application Version: 1.0
-2017-03-16 15:17:36,560 - world - [INFO] world: System Info: User: horacekv, Platform: Linux, Machine: horacekv-GE72-2QC, Release: 4.4.0-67-generic, Version: #88-Ubuntu SMP Wed Mar 8 16:34:45 UTC 2017
-2017-03-16 15:17:36,561 - world - [INFO] pupil_detectors.build: Building extention modules...
-2017-03-16 15:17:36,854 - world - [INFO] calibration_routines.optimization_calibration.build: Building extention modules...
-2017-03-16 15:17:37,415 - world - [ERROR] video_capture.uvc_backend: Init failed. Capture is started in ghost mode. No images will be supplied.
-2017-03-16 15:17:37,415 - world - [INFO] plugin: Loaded: UVC_Source
-2017-03-16 15:17:37,415 - world - [INFO] plugin: Loaded: Pupil_Data_Relay
-2017-03-16 15:17:37,419 - world - [INFO] plugin: Loaded: Pupil_Remote
-2017-03-16 15:17:37,442 - world - [INFO] plugin: Loaded: Vector_Gaze_Mapper
-2017-03-16 15:17:37,443 - world - [INFO] plugin: Loaded: Fixation_Detector_3D
-2017-03-16 15:17:37,444 - world - [INFO] plugin: Loaded: Log_Display
-2017-03-16 15:17:37,444 - world - [INFO] plugin: Loaded: Screen_Marker_Calibration
-2017-03-16 15:17:37,457 - world - [INFO] plugin: Loaded: UVC_Manager
-2017-03-16 15:17:37,457 - world - [INFO] plugin: Loaded: Display_Recent_Gaze
-2017-03-16 15:17:37,480 - world - [INFO] plugin: Loaded: Recorder
-2017-03-16 15:17:37,483 - world - [WARNING] world: Process started.
-2017-03-16 15:17:37,503 - world - [WARNING] plugin: Pupil_Remote: Update will be deprecated soon. Use 'recent_events instead.'
-2017-03-16 15:17:37,503 - world - [WARNING] plugin: Vector_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
-2017-03-16 15:17:37,503 - world - [WARNING] plugin: Fixation_Detector_3D: Update will be deprecated soon. Use 'recent_events instead.'
-2017-03-16 15:17:40,504 - eye0 - [INFO] pupil_detectors.build: Building extention modules...
-2017-03-16 15:17:40,862 - eye0 - [ERROR] video_capture.uvc_backend: Init failed. Capture is started in ghost mode. No images will be supplied.
-2017-03-16 15:17:41,027 - eye0 - [WARNING] eye: Process started.
-2017-03-16 15:17:49,651 - world - [ERROR] calibration_routines.screen_marker_calibration: Calibration required world capture video input.
-2017-03-16 15:17:54,911 - world - [INFO] plugin: Loaded: UVC_Manager
-2017-03-16 15:17:57,713 - world - [INFO] plugin: Loaded: UVC_Source
-2017-03-16 15:17:57,919 - world - [WARNING] video_capture.uvc_backend: Capture failed to provide frames. Attempting to reinit.
-2017-03-16 15:17:59,319 - world - [ERROR] uvc: Can't stop stream: Error:'Operation timed out.'. Will ignore this and try to continue.
-2017-03-16 15:17:59,342 - world - [INFO] video_capture.uvc_backend: Found device. BisonCam, NB Pro.
-2017-03-16 15:17:59,584 - world - [WARNING] uvc: Could not set Value. 'White Balance temperature'.
-2017-03-16 15:18:01,237 - world - [INFO] calibration_routines.screen_marker_calibration: Starting Calibration
-2017-03-16 15:18:04,894 - world - [INFO] calibration_routines.screen_marker_calibration: Stopping Calibration
-2017-03-16 15:18:04,895 - world - [ERROR] calibration_routines.finish_calibration: Did not collect enough data during calibration.
-2017-03-16 15:18:10,615 - world - [ERROR] uvc: Can't stop stream: Error:'Operation timed out.'. Will ignore this and try to continue.
-2017-03-16 15:18:10,735 - world - [INFO] world: Process shutting down.
-2017-03-16 15:18:10,758 - eye0 - [INFO] eye: Process shutting down.
+2017-03-25 12:18:17,862 - MainProcess - [INFO] os_utils: Disabling idle sleep not supported on this OS version.
+2017-03-25 12:18:20,375 - world - [INFO] world: Application Version: 1.0
+2017-03-25 12:18:20,376 - world - [INFO] world: System Info: User: tora, Platform: Linux, Machine: tora-pc, Release: 4.8.0-39-generic, Version: #42~16.04.1-Ubuntu SMP Mon Feb 20 15:06:07 UTC 2017
+2017-03-25 12:18:20,381 - world - [INFO] pupil_detectors.build: Building extention modules...
+2017-03-25 12:18:20,771 - world - [INFO] calibration_routines.optimization_calibration.build: Building extention modules...
+2017-03-25 12:19:25,058 - world - [INFO] plugin: Loaded: Fake_Source
+2017-03-25 12:19:39,412 - world - [INFO] plugin: Loaded: Pupil_Data_Relay
+2017-03-25 12:19:39,420 - world - [INFO] plugin: Loaded: Pupil_Remote
+2017-03-25 12:19:39,472 - world - [INFO] plugin: Loaded: Vector_Gaze_Mapper
+2017-03-25 12:19:39,472 - world - [INFO] plugin: Loaded: Fixation_Detector_3D
+2017-03-25 12:19:39,479 - world - [INFO] plugin: Loaded: Log_Display
+2017-03-25 12:19:39,479 - world - [INFO] plugin: Loaded: Screen_Marker_Calibration
+2017-03-25 12:19:39,479 - world - [INFO] plugin: Loaded: Fake_Manager
+2017-03-25 12:19:39,480 - world - [INFO] plugin: Loaded: Display_Recent_Gaze
+2017-03-25 12:19:39,504 - world - [INFO] plugin: Loaded: Recorder
+2017-03-25 12:19:39,508 - world - [WARNING] world: Process started.
+2017-03-25 12:19:39,510 - world - [WARNING] plugin: Pupil_Remote: Update will be deprecated soon. Use 'recent_events instead.'
+2017-03-25 12:19:39,510 - world - [WARNING] plugin: Vector_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
+2017-03-25 12:19:39,510 - world - [WARNING] plugin: Fixation_Detector_3D: Update will be deprecated soon. Use 'recent_events instead.'
+2017-03-25 12:19:42,115 - eye0 - [INFO] pupil_detectors.build: Building extention modules...
+2017-03-25 12:19:42,487 - eye0 - [ERROR] video_capture.uvc_backend: Init failed. Capture is started in ghost mode. No images will be supplied.
+2017-03-25 12:19:42,628 - eye0 - [INFO] pupil_detectors.build: Building extention modules...
+2017-03-25 12:19:42,719 - eye0 - [WARNING] eye: Process started.
+2017-03-25 12:19:43,031 - eye0 - [ERROR] video_capture.uvc_backend: Init failed. Capture is started in ghost mode. No images will be supplied.
+2017-03-25 12:19:43,269 - eye0 - [WARNING] eye: Process started.
+2017-03-25 12:19:46,568 - world - [INFO] world: Process shutting down.
+2017-03-25 12:19:46,620 - eye0 - [INFO] eye: Process shutting down.
+2017-03-25 12:19:46,634 - eye0 - [INFO] eye: Process shutting down.

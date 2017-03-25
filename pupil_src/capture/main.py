@@ -11,7 +11,7 @@ See COPYING and COPYING.LESSER for license details.
 
 import os, sys, platform
 
-# sys.argv.append('profiled')
+#sys.argv.append('profiled')
 #sys.argv.append('debug')
 sys.argv.append('service')
 
@@ -64,14 +64,9 @@ from os_utils import Prevent_Idle_Sleep
 from eyetracker import eyetracker
 
 #functions to run in seperate processes
-if 'profiled' in sys.argv:
-    from world import world_profiled as world
-    from service import service_profiled as service
-    from eye import eye_profiled as eye
-else:
-    from world import world
-    from service import service
-    from eye import eye
+from world import world
+from service import service
+from eye import eye
 
 
 

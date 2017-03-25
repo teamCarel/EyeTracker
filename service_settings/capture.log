@@ -1,0 +1,9 @@
+2017-03-25 12:55:35,929 - MainProcess - [INFO] os_utils: Disabling idle sleep not supported on this OS version.
+2017-03-25 12:55:36,051 - service - [INFO] pupil_detectors.build: Building extention modules...
+2017-03-25 12:55:36,411 - service - [INFO] calibration_routines.optimization_calibration.build: Building extention modules...
+2017-03-25 12:55:36,775 - service - [INFO] service: Application Version: 1.0
+2017-03-25 12:55:36,776 - service - [INFO] service: System Info: User: tora, Platform: Linux, Machine: tora-pc, Release: 4.8.0-39-generic, Version: #42~16.04.1-Ubuntu SMP Mon Feb 20 15:06:07 UTC 2017
+2017-03-25 12:55:36,921 - service - [WARNING] service: Process started.
+2017-03-25 12:55:41,085 - eye0 - [INFO] pupil_detectors.build: Building extention modules...
+2017-03-25 12:55:41,630 - eye0 - [WARNING] eye: Process started.
+2017-03-25 12:55:41,964 - service - [INFO] calibration_routines.screen_marker_calibration: Starting Calibration

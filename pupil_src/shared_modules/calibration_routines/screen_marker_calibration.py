@@ -81,6 +81,8 @@ class Screen_Marker_Calibration(Calibration_Plugin):
         self.lead_out = 5 #frames of markers shown after sampling is donw
 
 
+        self.monitor_idx = 1
+
         self.active_site = None
         self.sites = []
         self.display_pos = None
@@ -100,10 +102,10 @@ class Screen_Marker_Calibration(Calibration_Plugin):
         self.clicks_to_close = 5
 
         self.glfont = fontstash.Context()
-        self.glfont.add_font('opensans',get_opensans_font_path())
-        self.glfont.set_size(32)
-        self.glfont.set_color_float((0.2,0.5,0.9,1.0))
-        self.glfont.set_align_string(v_align='center')
+        #self.glfont.add_font('opensans',get_opensans_font_path())
+        #self.glfont.set_size(32)
+        #self.glfont.set_color_float((0.2,0.5,0.9,1.0))
+        #self.glfont.set_align_string(v_align='center')
 
         # UI Platform tweaks
         if system() == 'Linux':
@@ -173,7 +175,8 @@ class Screen_Marker_Calibration(Calibration_Plugin):
     def open_window(self,title='new_window'):
         if not self._window:
             if self.fullscreen:
-                monitor = glfwGetMonitors()[self.monitor_idx]
+                #monitors = glfwGetMonitors()
+                monitor = glfwGetPrimaryMonitor() #set from oru GUI if needed
                 width,height,redBits,blueBits,greenBits,refreshRate = glfwGetVideoMode(monitor)
             else:
                 monitor = None

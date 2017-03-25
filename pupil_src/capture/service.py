@@ -9,6 +9,7 @@ See COPYING and COPYING.LESSER for license details.
 ---------------------------------------------------------------------------~(*)
 '''
 import os
+from video_capture import source_classes
 # import sys, platform
 
 
@@ -46,6 +47,7 @@ def service(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url, ipc_push_url, us
     import logging
     import zmq
     import zmq_tools
+    import glfw
 
     # zmq ipc setup
     zmq_ctx = zmq.Context()
@@ -86,6 +88,9 @@ def service(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url, ipc_push_url, us
     logger.info('Application Version: {}'.format(version))
     logger.info('System Info: {}'.format(get_system_info()))
 
+
+    glfw.glfwInit()
+
     # g_pool holds variables for this process they are accesible to all plugins
     g_pool = Global_Container()
     g_pool.app = 'service'
@@ -106,12 +111,26 @@ def service(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url, ipc_push_url, us
 
     # manage plugins
     runtime_plugins = import_runtime_plugins(os.path.join(g_pool.user_dir, 'plugins'))
-    user_launchable_plugins = [Pupil_Groups, Pupil_Remote]+runtime_plugins
-    plugin_by_index = runtime_plugins+calibration_plugins+gaze_mapping_plugins+user_launchable_plugins
+    user_launchable_plugins = [Pupil_Groups, Pupil_Remote, calibration_plugins[0], source_classes[3]]+runtime_plugins
+    plugin_by_index = runtime_plugins+gaze_mapping_plugins+user_launchable_plugins
     name_by_index = [p.__name__ for p in plugin_by_index]
     plugin_by_name = dict(zip(name_by_index, plugin_by_index))
-    default_plugins = [('Dummy_Gaze_Mapper', {}), ('HMD_Calibration', {}), ('Pupil_Remote', {})]
+    
+    default_capture_settings = {
+        'preferred_names': ["Pupil Cam1 ID2", "Logitech Camera", "(046d:081d)",
+                            "C510", "B525", "C525", "C615", "C920", "C930e"],
+        'frame_size': (1280, 720),
+        'frame_rate': 30
+    }
 
+    default_plugins = [("UVC_Source", default_capture_settings),
+                       ('Pupil_Data_Relay', {}),
+                       ('UVC_Manager', {}),
+                       ('Dummy_Gaze_Mapper', {}),
+                       ('Screen_Marker_Calibration', {}),
+                       ('Recorder', {}),
+                       ('Pupil_Remote', {}),
+                       ('Fixation_Detector_3D', {})]
     tick = delta_t()
 
     def get_dt():
@@ -119,19 +138,19 @@ def service(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url, ipc_push_url, us
 
     # load session persistent settings
     session_settings = Persistent_Dict(os.path.join(g_pool.user_dir, 'user_settings_service'))
-    if session_settings.get("version", VersionFormat('0.0')) < g_pool.version:
-        logger.info("Session setting are from older version of this app. I will not use those.")
-        session_settings.clear()
+    #if session_settings.get("version", VersionFormat('0.0')) < g_pool.version:
+    #    logger.info("Session setting are from older version of this app. I will not use those.")
+    #    session_settings.clear()
 
     g_pool.detection_mapping_mode = session_settings.get('detection_mapping_mode', '2d')
-    g_pool.active_calibration_plugin = None
+    g_pool.active_calibration_plugin = calibration_plugins[0]
+    #g_pool.capture_manager = manager_classes[3]
     g_pool.active_gaze_mapping_plugin = None
 
     audio.audio_mode = session_settings.get('audio_mode', audio.default_audio_mode)
 
     # plugins that are loaded based on user settings from previous session
     g_pool.plugins = Plugin_List(g_pool, plugin_by_name, session_settings.get('loaded_plugins', default_plugins))
-
     def launch_eye_process(eye_id, delay=0):
         n = {'subject': 'eye_process.should_start', 'eye_id': eye_id, 'delay': delay}
         ipc_pub.notify(n)
@@ -224,16 +243,3 @@ def service(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url, ipc_push_url, us
     # shut down launcher
     n = {'subject': 'launcher_process.should_stop'}
     ipc_pub.notify(n)
-
-
-def service_profiled(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url, ipc_push_url, user_dir, version):
-    import cProfile, subprocess, os
-    from service import service
-    cProfile.runctx("service(timebase,eyes_are_alive,ipc_pub_url,ipc_sub_url,ipc_push_url,user_dir,version)",
-                    {'timebase': timebase, 'eyes_are_alive': eyes_are_alive, 'ipc_pub_url': ipc_pub_url,
-                     'ipc_sub_url': ipc_sub_url, 'ipc_push_url': ipc_push_url, 'user_dir': user_dir,
-                     'version': version}, locals(), "service.pstats")
-    loc = os.path.abspath(__file__).rsplit('pupil_src', 1)
-    gprof2dot_loc = os.path.join(loc[0], 'pupil_src', 'shared_modules', 'gprof2dot.py')
-    subprocess.call("python "+gprof2dot_loc+" -f pstats service.pstats | dot -Tpng -o service_cpu_time.png", shell=True)
-    print("created cpu time graph for service process. Please check out the png next to the service.py file")
