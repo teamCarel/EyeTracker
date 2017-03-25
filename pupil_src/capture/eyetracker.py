@@ -2,23 +2,37 @@
 class Global_Container(object):
     pass
 
-def eyetracker(ipc_sub_url):
+def eyetracker(g_pool):
     print("tracker started")
-     # we need a serialiser 
-    import msgpack as serializer
     import zmq
-    import time
+    import msgpack
+    from time import sleep
     ctx = zmq.Context()
-    subscriber = ctx.socket(zmq.SUB)
-    subscriber.connect(ipc_sub_url)
-    #subscriber.set(zmq.SUBSCRIBE, 'notify.') #receive all notification messages
-    #subscriber.set(zmq.SUBSCRIBE, 'logging.error') #receive logging error messages
-    subscriber.set(zmq.SUBSCRIBE, b"gaze") #receive eye info
-    #subscriber.set(zmq.SUBSCRIBE, '') #receive everything (don't do this)
-    # you can setup multiple subscriber sockets
-    # Sockets can be polled or read in different threads.
-    while True:
-        topic,payload = subscriber.recv_multipart()
-        message = serializer.unpackb(payload, use_list=True)
-        print(message[b'norm_pos'])
-        time.sleep(10)
+    # The requester talks to Pupil remote and receives the session unique IPC SUB PORT
+    requester = ctx.socket(zmq.REQ)
+    ip = '127.0.0.1' #If you talk to a different machine use its IP.
+    port = 50020 #The port defaults to 50020 but can be set in the GUI of Pupil Capture.
+    requester.connect('tcp://%s:%s'%(ip,port)) 
+    sleep(5)
+    
+    notification = {'subject':'eye_process.should_start','eye_id' : 0}
+    topic = 'notify.' + notification['subject']
+    payload = msgpack.dumps(notification)
+    requester.send_multipart((topic.encode(),payload))
+    print (requester.recv())
+     
+    sleep(10)
+    
+#     notification = {'subject':'start_plugin','name' : 'Manual_Marker_Calibration'}
+#     topic = 'notify.' + notification['subject']
+#     payload = msgpack.dumps(notification)
+#     requester.send_multipart((topic.encode(),payload))
+#     print (requester.recv())
+#      
+#     sleep(10)
+    
+    notification = {'subject':'calibration.should_start'}
+    topic = 'notify.' + notification['subject']
+    payload = msgpack.dumps(notification)
+    requester.send_multipart((topic.encode(),payload))
+    print (requester.recv())
