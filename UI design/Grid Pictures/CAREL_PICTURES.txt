@@ -1,0 +1,37 @@
+Consumables
+	01 - Drink
+	02 - Food
+
+Hygiene
+	03 - Toilet
+	04 - Toilet Paper
+	05 - Shower
+	06 - Garbage	
+
+Devices
+	07 - Radio
+	08 - TV
+	09 - Lights
+	10 - Lock
+
+Movement
+	11 - Door	
+	12 - Window
+	13 - Stairs/Ramp
+	14 - Blinds
+	15 - Bed
+	
+Contact
+	16 - Help/911
+	17 - Repair
+	18 - Phone
+	19 - Doorbell
+	21 - Taxi
+	22 - Shop
+	23 - Doctor
+	
+Activity
+	24 - Book
+	25 - Newspaper
+	26 - Email
+	27 - Netflix
