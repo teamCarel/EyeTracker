@@ -94,18 +94,18 @@ class Screen_Marker_Calibration(Calibration_Plugin):
         self.marker_scale = marker_scale
 
         self._window = None
+        self.world_window = g_pool.main_window
 
         self.menu = None
-        self.button = None
 
         self.fullscreen = fullscreen
         self.clicks_to_close = 5
 
         self.glfont = fontstash.Context()
-        #self.glfont.add_font('opensans',get_opensans_font_path())
-        #self.glfont.set_size(32)
-        #self.glfont.set_color_float((0.2,0.5,0.9,1.0))
-        #self.glfont.set_align_string(v_align='center')
+        self.glfont.add_font('opensans',get_opensans_font_path())
+        self.glfont.set_size(32)
+        self.glfont.set_color_float((0.2,0.5,0.9,1.0))
+        self.glfont.set_align_string(v_align='center')
 
         # UI Platform tweaks
         if system() == 'Linux':
@@ -117,26 +117,27 @@ class Screen_Marker_Calibration(Calibration_Plugin):
 
 
     def init_gui(self):
-        self.monitor_idx = 0
-        self.monitor_names = [glfwGetMonitorName(m) for m in glfwGetMonitors()]
-
-        #primary_monitor = glfwGetPrimaryMonitor()
-        self.info = ui.Info_Text("Calibrate gaze parameters using a screen based animation.")
-        self.g_pool.calibration_menu.append(self.info)
-
-        self.menu = ui.Growing_Menu('Controls')
-        self.g_pool.calibration_menu.append(self.menu)
-        self.menu.append(ui.Selector('monitor_idx',self,selection = range(len(self.monitor_names)),labels=self.monitor_names,label='Monitor'))
-        self.menu.append(ui.Switch('fullscreen',self,label='Use fullscreen'))
-        self.menu.append(ui.Slider('marker_scale',self,step=0.1,min=0.5,max=2.0,label='Marker size'))
-        self.menu.append(ui.Slider('sample_duration',self,step=1,min=10,max=100,label='Sample duration'))
-
-        self.button = ui.Thumb('active',self,label='C',setter=self.toggle,hotkey='c')
-        self.button.on_color[:] = (.3,.2,1.,.9)
-        self.g_pool.quickbar.insert(0,self.button)
+          self.monitor_idx = 0
+#         self.monitor_names = [glfwGetMonitorName(m) for m in glfwGetMonitors()]
+# 
+#         #primary_monitor = glfwGetPrimaryMonitor()
+#         self.info = ui.Info_Text("Calibrate gaze parameters using a screen based animation.")
+#         self.g_pool.calibration_menu.append(self.info)
+# 
+#         self.menu = ui.Growing_Menu('Controls')
+#         self.g_pool.calibration_menu.append(self.menu)
+#         self.menu.append(ui.Selector('monitor_idx',self,selection = range(len(self.monitor_names)),labels=self.monitor_names,label='Monitor'))
+#         self.menu.append(ui.Switch('fullscreen',self,label='Use fullscreen'))
+#         self.menu.append(ui.Slider('marker_scale',self,step=0.1,min=0.5,max=2.0,label='Marker size'))
+#         self.menu.append(ui.Slider('sample_duration',self,step=1,min=10,max=100,label='Sample duration'))
+# 
+#         self.button = ui.Thumb('active',self,label='C',setter=self.toggle,hotkey='c')
+#         self.button.on_color[:] = (.3,.2,1.,.9)
+#         self.g_pool.quickbar.insert(0,self.button)
 
 
     def deinit_gui(self):
+        return
         if self.menu:
             self.g_pool.calibration_menu.remove(self.menu)
             self.g_pool.calibration_menu.remove(self.info)
@@ -173,6 +174,7 @@ class Screen_Marker_Calibration(Calibration_Plugin):
         self.open_window("Calibration")
 
     def open_window(self,title='new_window'):
+        glfwShowWindow(self.world_window)
         if not self._window:
             if self.fullscreen:
                 #monitors = glfwGetMonitors()
@@ -224,7 +226,6 @@ class Screen_Marker_Calibration(Calibration_Plugin):
         self.counter = 0
         self.close_window()
         self.active = False
-        self.button.status_text = ''
         finish_calibration(self.g_pool,self.pupil_list,self.ref_list)
 
 
@@ -236,6 +237,7 @@ class Screen_Marker_Calibration(Calibration_Plugin):
             glfwDestroyWindow(self._window)
             self._window = None
             glfwMakeContextCurrent(active_window)
+            glfwHideWindow(self.world_window)
 
     def recent_events(self, events):
         frame = events.get('frame')
@@ -294,7 +296,6 @@ class Screen_Marker_Calibration(Calibration_Plugin):
             # use np.arrays for per element wise math
             self.display_pos = np.array(self.active_site)
             self.on_position = on_position
-            self.button.status_text = '{} / {}'.format(self.active_site, 9)
 
     def gl_display(self):
         """

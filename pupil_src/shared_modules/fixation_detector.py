@@ -763,6 +763,7 @@ class Fixation_Detector_3D(Online_Base_Fixation_Detector):
                     events['fixations'].append(new_fixation)
 
     def init_gui(self):
+        return
         def close():
             self.alive = False
 

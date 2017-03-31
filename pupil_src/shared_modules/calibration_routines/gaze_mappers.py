@@ -21,7 +21,7 @@ import zmq_tools
 import threading
 from multiprocessing import Process as Thread
 
-from . visualizer_calibration import Calibration_Visualizer
+#from . visualizer_calibration import Calibration_Visualizer
 
 def _clamp_norm_point(pos):
     '''realistic numbers for norm pos should be in this range.

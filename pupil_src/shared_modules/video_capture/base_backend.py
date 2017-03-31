@@ -95,6 +95,7 @@ class Base_Source(Plugin):
 
 
     def gl_display(self):
+        return
         if self._recent_frame is not None:
             self.g_pool.image_tex.update_from_frame(self._recent_frame)
             gl_utils.glFlush()
@@ -181,6 +182,7 @@ class Base_Manager(Plugin):
         pass
 
     def deinit_gui(self):
+        return
         """Removes GUI elements but backend selector"""
         del self.g_pool.capture_selector_menu[1:]
 

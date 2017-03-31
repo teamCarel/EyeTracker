@@ -13,24 +13,14 @@ import os, sys, platform
 
 #sys.argv.append('profiled')
 #sys.argv.append('debug')
-sys.argv.append('service')
+#sys.argv.append('service')
 
-app = 'capture'
-
-if getattr(sys, 'frozen', False):
-    if 'pupil_service' in sys.executable:
-        app = 'service'
-    # Specifiy user dir.
-    user_dir = os.path.expanduser(os.path.join('~', 'pupil_{}_settings'.format(app)))
-    version_file = os.path.join(sys._MEIPASS,'_version_string_')
-else:
-    if 'service' in sys.argv:
-        app = 'service'
-    pupil_base_dir = os.path.abspath(__file__).rsplit('pupil_src', 1)[0]
-    sys.path.append(os.path.join(pupil_base_dir, 'pupil_src', 'shared_modules'))
-    # Specifiy user dir.
-    user_dir = os.path.join(pupil_base_dir,'{}_settings'.format(app))
-    version_file = None
+app = 'service'
+pupil_base_dir = os.path.abspath(__file__).rsplit('pupil_src', 1)[0]
+sys.path.append(os.path.join(pupil_base_dir, 'pupil_src', 'shared_modules'))
+# Specifiy user dir.
+user_dir = os.path.join(pupil_base_dir,'{}_settings'.format(app))
+version_file = None
 
 # create folder for user settings, tmp data
 if not os.path.isdir(user_dir):
@@ -65,7 +55,6 @@ from eyetracker import eyetracker
 
 #functions to run in seperate processes
 from world import world
-from service import service
 from eye import eye
 
 
@@ -195,40 +184,17 @@ def launcher():
     cmd_sub = zmq_tools.Msg_Receiver(zmq_ctx,ipc_sub_url,topics=topics )
     cmd_push = zmq_tools.Msg_Dispatcher(zmq_ctx,ipc_push_url)
 
-    if app == 'service':
-        Process(target=service,
-                      name= 'service',
-                      args=(timebase,
-                            eyes_are_alive,
-                            ipc_pub_url,
-                            ipc_sub_url,
-                            ipc_push_url,
-                            user_dir,
-                            app_version
-                            )).start()
-        #TODO  move eyetracker to service and pass g_pool
-        Process(target=eyetracker,
-                 name= 'eyetracker',
-                 args=(None,
-                       )).start()
-
-    else:
-        Process(target=world,
-                      name= 'world',
-                      args=(timebase,
-                            eyes_are_alive,
-                            ipc_pub_url,
-                            ipc_sub_url,
-                            ipc_push_url,
-                            user_dir,
-                            app_version,
-                            )).start()                         
-        #TODO  tady
-        print(ipc_sub_url)
-        Process(target=eyetracker,
-                 name= 'eyetracker',
-                 args=(None,
-                       )).start()
+    Process(target=world, name= 'world',
+            args=(timebase,
+                  eyes_are_alive,
+                  ipc_pub_url,
+                  ipc_sub_url,
+                  ipc_push_url,
+                  user_dir,
+                  app_version,
+                  )).start()                         
+    Process(target=eyetracker,
+            name= 'eyetracker').start()
 
 
     with Prevent_Idle_Sleep():

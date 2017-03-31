@@ -68,6 +68,7 @@ class Fake_Source(Base_Source):
         self.frame_count = 0
 
     def init_gui(self):
+        return
         from pyglui import ui
         text = ui.Info_Text("Fake capture source streaming test images.")
         self.g_pool.capture_source_menu.append(text)

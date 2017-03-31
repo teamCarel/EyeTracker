@@ -2,7 +2,7 @@
 class Global_Container(object):
     pass
 
-def eyetracker(g_pool):
+def eyetracker():
     print("tracker started")
     import zmq
     import msgpack
@@ -20,6 +20,14 @@ def eyetracker(g_pool):
     payload = msgpack.dumps(notification)
     requester.send_multipart((topic.encode(),payload))
     print (requester.recv())
+    
+#     sleep(5)
+#     
+#     notification = {'subject':'set_detection_mapping_mode','eye_id' : 0}
+#     topic = 'notify.' + notification['subject']
+#     payload = msgpack.dumps(notification)
+#     requester.send_multipart((topic.encode(),payload))
+#     print (requester.recv())
     
     args={'name':'test','frame_size':(1920,1080),'frame_rate' : 30}
     notification = {'subject':'start_plugin','name' : 'Fake_Source','args':args}
@@ -41,48 +49,37 @@ def eyetracker(g_pool):
     payload = msgpack.dumps(notification)
     requester.send_multipart((topic.encode(),payload))
     print (requester.recv())  
+
+    sleep(10)
     
     notification = {'subject':'calibration.should_start'}
     topic = 'notify.' + notification['subject']
     payload = msgpack.dumps(notification)
     requester.send_multipart((topic.encode(),payload))
-    print (requester.recv())
+    print (requester.recv())  
     
-    #eyetracker2(g_pool)
-
-def eyetracker2(g_pool):
-    import zmq, msgpack
-    from time import sleep
-    from zmq_tools import Msg_Receiver
-    ctx = zmq.Context()
-    url = 'tcp://127.0.0.1'
-    
-    # open Pupil Remote socket
-    requester = ctx.socket(zmq.REQ)
-    requester.connect('%s:%s'%(url,50020))
-    requester.send(b'SUB_PORT')
-    ipc_sub_port = requester.recv().decode()
-    
-    # setup message receiver
-    sub_url = ('%s:%s')%(url,ipc_sub_port)
-    receiver = Msg_Receiver(ctx,sub_url,topics=(b'notify.meta.doc',))    
-    
-    # construct message
-    topic = b'notify.start_plugin'
-    payload = msgpack.dumps({'subject':'start_plugin','name':'Screen_Marker_Calibration'})
-    requester.send_multipart([topic,payload])
-    receiver.recv()
     sleep(1)
     
-    # wait and print responses
-    # construct message
-    topic = b'notify.meta.should_doc'
-    payload = msgpack.dumps({'subject':'meta.should_doc'})
-    requester.send_multipart([topic,payload])
+    requester.send(b'SUB_PORT')
+    sub_port = requester.recv().decode()
     
+    subscriber = ctx.socket(zmq.SUB)
+    
+    subscriber.connect('tcp://%s:%s'%(ip,sub_port)) 
+    subscriber.set(zmq.SUBSCRIBE, b'gaze') #receive all notification messages
+
 
     while True:
-        topic, payload = receiver.recv()
-        actor = payload.get('actor')
-        doc = payload.get('doc')
-        print ('%s:%s'%(actor,doc))
+        topic,payload = subscriber.recv_multipart()
+        message = msgpack.loads(payload)
+        print (topic,':',message)
+        sleep(30)
+
+# 
+#     while True:
+#         notification = {'subject':'show_eye_cam'}
+#         topic = 'notify.' + notification['subject']
+#         payload = msgpack.dumps(notification)
+#         requester.send_multipart((topic.encode(),payload))
+#         print (requester.recv())
+#         sleep(15)
