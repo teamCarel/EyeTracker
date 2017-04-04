@@ -251,7 +251,7 @@ def eye(timebase, is_alive_flag, ipc_pub_url, ipc_sub_url, ipc_push_url,
 
         pupil_detector_settings = session_settings.get('pupil_detector_settings', None)
         #TODO set manually
-        last_pupil_detector = pupil_detectors[session_settings.get('last_pupil_detector', Detector_2D.__name__)]
+        last_pupil_detector = pupil_detectors[session_settings.get('last_pupil_detector', Detector_3D.__name__)]
         g_pool.pupil_detector = last_pupil_detector(g_pool, pupil_detector_settings)
 
         # UI callback functions

@@ -30,24 +30,16 @@ def eyetracker():
     payload = msgpack.dumps(notification)
     requester.send_multipart((topic.encode(),payload))
     print (requester.recv())
+
+    sleep(15)
+    
+    notification = {'subject':'calibration.should_start'}
+    topic = 'notify.' + notification['subject']
+    payload = msgpack.dumps(notification)
+    requester.send_multipart((topic.encode(),payload))
+    print (requester.recv())  
+    
     sleep(30)
-    
-     
-#     notification = {'subject':'start_plugin','name' : 'Screen_Marker_Calibration'}
-#     topic = 'notify.' + notification['subject']
-#     payload = msgpack.dumps(notification)
-#     requester.send_multipart((topic.encode(),payload))
-#     print (requester.recv())  
-# 
-#     sleep(1)
-#     
-#     notification = {'subject':'calibration.should_start'}
-#     topic = 'notify.' + notification['subject']
-#     payload = msgpack.dumps(notification)
-#     requester.send_multipart((topic.encode(),payload))
-#     print (requester.recv())  
-    
-    sleep(1)
     
     requester.send(b'SUB_PORT')
     sub_port = requester.recv().decode()
@@ -55,8 +47,8 @@ def eyetracker():
     subscriber = ctx.socket(zmq.SUB)
     
     subscriber.connect('tcp://%s:%s'%(ip,sub_port)) 
-    #subscriber.set(zmq.SUBSCRIBE, b'gaze') #receive all notification messages
-    subscriber.set(zmq.SUBSCRIBE, b'pupil.0')
+    subscriber.set(zmq.SUBSCRIBE, b'gaze') #receive all notification messages
+    #subscriber.set(zmq.SUBSCRIBE, b'pupil.0')
     i = 0
     while i<10:
         topic,payload = subscriber.recv_multipart()

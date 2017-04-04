@@ -147,7 +147,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     def get_dt():
         return next(tick)
 
-    g_pool.detection_mapping_mode = '2d'
+    g_pool.detection_mapping_mode = '3d'
     g_pool.active_gaze_mapping_plugin = Gaze_Mapper_Plugin(g_pool)
 
     def launch_eye_process(eye_id, delay=0):

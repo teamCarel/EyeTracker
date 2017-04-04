@@ -21,7 +21,7 @@ import zmq_tools
 import threading
 from multiprocessing import Process as Thread
 
-#from . visualizer_calibration import Calibration_Visualizer
+from . visualizer_calibration import Calibration_Visualizer
 
 def _clamp_norm_point(pos):
     '''realistic numbers for norm pos should be in this range.
@@ -233,7 +233,7 @@ class Vector_Gaze_Mapper(Monocular_Gaze_Mapper_Base,Gaze_Mapping_Plugin):
                 self.visualizer.close_window()
 
         self.menu = ui.Growing_Menu('Monocular 3D gaze mapper')
-        self.g_pool.sidebar.insert(3,self.menu)
+        #self.g_pool.sidebar.insert(3,self.menu)
         self.menu.append(ui.Switch('debug window',setter=open_close_window, getter=lambda: bool(self.visualizer.window) ))
         self.menu.append(ui.Slider('gaze_distance',self,min=50,max=2000,label='gaze distance mm'))
 
