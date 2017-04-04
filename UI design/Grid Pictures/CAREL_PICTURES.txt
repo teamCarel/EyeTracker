@@ -17,21 +17,19 @@ Devices
 Movement
 	11 - Door	
 	12 - Window
-	13 - Stairs/Ramp
-	14 - Blinds
+	13 - Blinds
+	14 - Stairs/Ramp
 	15 - Bed
 	
 Contact
 	16 - Help/911
 	17 - Repair
-	18 - Phone
-	19 - Doorbell
-	21 - Taxi
-	22 - Shop
-	23 - Doctor
-	
+	18 - Shop
+	19 - Taxi
+	20 - Phone
+	21 - Doorbell
+
 Activity
-	24 - Book
-	25 - Newspaper
-	26 - Email
-	27 - Netflix
+	22 - Book
+	23 - Newspaper
+	24 - Movies
