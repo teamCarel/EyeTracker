@@ -93,7 +93,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     # Gaze mapping #TODO: Change to Monocular?
     from calibration_routines.gaze_mappers import Dummy_Gaze_Mapper as Gaze_Mapper_Plugin
     # Video Source #TODO: change to UVC
-    from video_capture.fake_backend import Fake_Source as Video_Source_Plugin
+    from video_capture.uvc_backend import UVC_Source as Video_Source_Plugin
     # Fixation detector #TODO: needed?
     #from fixation_detector import Fixation_Detector_2D
     from pupil_remote import Pupil_Remote
@@ -129,8 +129,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     plugin_by_name = dict(zip(name_by_index, plugin_by_index))
 
     default_capture_settings = {
-        'preferred_names': ["Pupil Cam1 ID2", "Logitech Camera", "(046d:081d)",
-                            "C510", "B525", "C525", "C615", "C920", "C930e"],
+        'preferred_names': ["Pupil Cam1 ID2"],
         'frame_size': (1280, 720),
         'frame_rate': 30
     }
@@ -149,6 +148,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
         return next(tick)
 
     g_pool.detection_mapping_mode = '2d'
+    g_pool.active_gaze_mapping_plugin = Gaze_Mapper_Plugin(g_pool)
 
     def launch_eye_process(eye_id, delay=0):
         n = {'subject': 'eye_process.should_start.{}'.format(eye_id),
@@ -211,6 +211,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     def window_should_update():
         return next(window_update_timer)
 
+    #hide window
     glfw.glfwHideWindow(main_window)
     ipc_pub.notify({'subject': 'world_process.started'})
     logger.warning('Process started.')
@@ -245,8 +246,10 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
         g_pool.plugins.clean()
 
         # send new events to ipc:
-        del events['pupil_positions']  # already on the wire
-        del events['gaze_positions']  # sent earlier
+        if 'pupil_positions' in events:
+            del events['pupil_positions']  # already on the wire
+        if 'gaze_positions' in events:   
+            del events['gaze_positions']  # sent earlier
         if 'frame' in events:
             del events['frame']  #send explicity with frame publisher
         del events['dt']  #no need to send this

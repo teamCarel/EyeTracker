@@ -145,17 +145,14 @@ class UVC_Source(Base_Source):
         current_size = self.uvc_capture.frame_size
         current_fps = self.uvc_capture.frame_rate
         current_uvc_controls = self._get_uvc_controls()
-        self.deinit_gui()
         self.uvc_capture.close()
         self.uvc_capture = uvc.Capture(uid)
         self.configure_capture(current_size, current_fps, current_uvc_controls)
-        self.init_gui()
 
     def _init_capture(self, uid):
-        self.deinit_gui()
         self.uvc_capture = uvc.Capture(uid)
         self.configure_capture(self.frame_size_backup, self.frame_rate_backup, self._get_uvc_controls())
-        self.init_gui()
+
 
     def _re_init_capture_by_names(self, names):
         # burn-in test specific. Do not change text!
@@ -294,7 +291,7 @@ class UVC_Source(Base_Source):
 
         if self.uvc_capture is None:
             ui_elements.append(ui.Info_Text('Capture initialization faild.'))
-            self.g_pool.capture_source_menu.extend(ui_elements)
+            #self.g_pool.capture_source_menu.extend(ui_elements)
             return
 
         ui_elements.append(ui.Info_Text('{} Controls'.format(self.name)))
@@ -342,12 +339,12 @@ class UVC_Source(Base_Source):
                 else:
                     sensor_control.append(c)
 
-        ui_elements.append(sensor_control)
-        if image_processing.elements:
-            ui_elements.append(image_processing)
-        ui_elements.append(ui.Button("refresh",gui_update_from_device))
-        ui_elements.append(ui.Button("load defaults",gui_load_defaults))
-        self.g_pool.capture_source_menu.extend(ui_elements)
+#         ui_elements.append(sensor_control)
+#         if image_processing.elements:
+#             ui_elements.append(image_processing)
+#         ui_elements.append(ui.Button("refresh",gui_update_from_device))
+#         ui_elements.append(ui.Button("load defaults",gui_load_defaults))
+#         self.g_pool.capture_source_menu.extend(ui_elements)
 
     def cleanup(self):
         self.devices.cleanup()

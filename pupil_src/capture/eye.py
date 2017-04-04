@@ -161,8 +161,7 @@ def eye(timebase, is_alive_flag, ipc_pub_url, ipc_sub_url, ipc_push_url,
 
         def on_iconify(window, iconified):
             g_pool.iconified = iconified
-            on_close(window)
-
+   
         def on_button(window, button, action, mods):
             if g_pool.display_mode == 'roi':
                 if action == glfw.GLFW_RELEASE and g_pool.u_r.active_edit_pt:
@@ -228,7 +227,7 @@ def eye(timebase, is_alive_flag, ipc_pub_url, ipc_sub_url, ipc_push_url,
         g_pool.capture_manager = manager_class_by_name[manager_class_name](g_pool,**manager_settings)
 
         #TODO Change IDs if needed
-        cap_src = ["Pupil Cam1 ID0","HD-6000","Integrated Camera","HD USB Camera","USB 2.0 Camera"]
+        cap_src = ["Pupil Cam1 ID0"]
 
 
         # Initialize capture
@@ -348,6 +347,7 @@ def eye(timebase, is_alive_flag, ipc_pub_url, ipc_sub_url, ipc_push_url,
                     if notification['eye_id'] == eye_id:
                         break
                 elif subject == 'show_eye_cam':
+                    
                     glfw.glfwShowWindow(main_window)
                 elif subject.startswith('meta.should_doc'):
                     ipc_socket.notify({
