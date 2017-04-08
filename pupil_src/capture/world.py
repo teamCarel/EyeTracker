@@ -51,6 +51,10 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
 
     # general imports
     import logging
+    from multiprocessing import Process
+    
+    #import eyetracker
+    from eyetracker import Eyetracker
 
     # networking
     import zmq
@@ -132,8 +136,8 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
         'preferred_names': ["Pupil Cam1 ID2"],
         'frame_size': (1280, 720),
         'frame_rate': 30
-    }
- 
+    } 
+    
     default_plugins = [("UVC_Source", default_capture_settings),
                        ('Pupil_Data_Relay', {}),
                        ('UVC_Manager', {}),
@@ -148,22 +152,22 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
         return next(tick)
 
     g_pool.detection_mapping_mode = '3d'
-    g_pool.active_gaze_mapping_plugin = Gaze_Mapper_Plugin(g_pool)
+#     g_pool.active_gaze_mapping_plugin = Gaze_Mapper_Plugin(g_pool)
 
-    def launch_eye_process(eye_id, delay=0):
-        n = {'subject': 'eye_process.should_start.{}'.format(eye_id),
-             'eye_id': eye_id, 'delay': delay}
-        ipc_pub.notify(n)
-
-    def stop_eye_process(eye_id):
-        n = {'subject': 'eye_process.should_stop', 'eye_id': eye_id}
-        ipc_pub.notify(n)
-
-    def start_stop_eye(eye_id, make_alive):
-        if make_alive:
-            launch_eye_process(eye_id)
-        else:
-            stop_eye_process(eye_id)
+#     def launch_eye_process(eye_id, delay=0):
+#         n = {'subject': 'eye_process.should_start.{}'.format(eye_id),
+#              'eye_id': eye_id, 'delay': delay}
+#         ipc_pub.notify(n)
+#  
+#     def stop_eye_process(eye_id):
+#         n = {'subject': 'eye_process.should_stop', 'eye_id': eye_id}
+#         ipc_pub.notify(n)
+ 
+#     def start_stop_eye(eye_id, make_alive):
+#         if make_alive:
+#             launch_eye_process(eye_id)
+#         else:
+#             stop_eye_process(eye_id)
 
     def handle_notifications(n):
         subject = n['subject']
@@ -194,7 +198,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
 
     # window and gl setup
     glfw.glfwInit()
-    main_window = glfw.glfwCreateWindow(1, 1, "Pupil Backend")
+    main_window = glfw.glfwCreateWindow(1, 1, "Pupil World Backend")
     glfw.glfwSetWindowPos(main_window, -1, -1)
     glfw.glfwMakeContextCurrent(main_window)
     cygl.utils.init()
@@ -215,6 +219,15 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     glfw.glfwHideWindow(main_window)
     ipc_pub.notify({'subject': 'world_process.started'})
     logger.warning('Process started.')
+    
+    #create eyetracker object
+    et_object = Eyetracker(ipc_push_url, ipc_sub_url);
+    
+    #start eye process
+    # TODO start in launcher?
+    ipc_pub.notify({'subject':'eye_process.should_start','eye_id' : 0})    
+    
+    #Process(target=et_object.calibrate(),name='calib').start()
 
 
     # Event loop

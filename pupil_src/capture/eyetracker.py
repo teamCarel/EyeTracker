@@ -1,13 +1,60 @@
+import zmq
+import zmq_tools
+import msgpack
+import sys
+from time import sleep
 
-class Global_Container(object):
-    pass
+class Eyetracker():
+    #TODO documentation
 
-def eyetracker():
+    def __init__(self,ipc_push_url,ipc_sub_url):
+        print("tracker started")
+        ctx = zmq.Context()
+        # create communication sockets
+        self.ipc_pub = zmq_tools.Msg_Dispatcher(ctx, ipc_push_url)
+        # TODO add any additional needed topics
+        self.ipc_sub = zmq_tools.Msg_Receiver(ctx, ipc_sub_url)#, topics=('notify','gaze',))
+        self.screen_limits = {'x_min' : sys.maxsize, 'x_max' : -sys.maxsize -1, 'y_min' : sys.maxsize, 'y_max' : -sys.maxsize -1, 'x_range': None, 'y_range': None}
+        
+    def showEyeCam(self):
+        self.ipc_pub.notify({'subject':'show_eye_cam'})
+    
+    def closeAll(self):
+        self.ipc_pub.notify({'subject':'eye_process.should_stop'}) 
+        self.ipc_pub.notify({'subject':'launcher_process.should_stop'})
+        
+    def calibrate(self):
+        self.ipc_pub.notify({'subject':'calibration.should_start'})  
+        self.ipc_sub.subscribe('notify') 
+        self.ipc_sub.subscribe('gaze')
+        while True:
+            topic,payload = self.ipc_sub.recv()
+            if('calibration.failed' in topic):
+                self.ipc_sub.unsubscribe('notify')
+                self.ipc_sub.unsubscribe('gaze')
+                #reset x and y ranges to signalize failed calibration
+                self.screen_limits['x_range'] = None
+                self.screen_limits['y_range'] = None
+                
+            elif('calibration.successfull' in topic):
+                self.ipc_pub.unsubscribe('notify')
+                self.screen_limits['x_range'] = self.screen_limits['x_max']-self.screen_limits['x_min']
+                self.screen_limits['y_range'] = self.screen_limits['y_max']-self.screen_limits['y_min']
+                #TODO ready for tracking flag or start tracking
+            elif('gaze' in topic):
+                #TODO test if b'... is needed
+                gaze_pos = msgpack.unpack(payload)[b'norm_pos']
+                # recalibrate screen limits
+                #if(gaze_pos[0] < 1 & gaze_pos[0] > 0 & gaze_pos[1] < 1  & gaze_pos[1] > 0):
+                if(gaze_pos < (1,1) & gaze_pos > (0,0)):
+                    self.screen_limits['x_min'] = min(gaze_pos[0],self.screen_limits['x_min'])
+                    self.screen_limits['y_min'] = min(gaze_pos[1],self.screen_limits['y_min'])
+                    self.screen_limits['x_max'] = max(gaze_pos[0],self.screen_limits['x_max'])
+                    self.screen_limits['y_max'] = max(gaze_pos[1],self.screen_limits['y_max'])
+    
+def eyetrackOld():  
     #printListeners()
     print("tracker started")
-    import zmq
-    import msgpack
-    from time import sleep
     ctx = zmq.Context()
     # The requester talks to Pupil remote and receives the session unique IPC SUB PORT
     requester = ctx.socket(zmq.REQ)

@@ -50,9 +50,6 @@ from time import time,sleep
 # os utilities
 from os_utils import Prevent_Idle_Sleep
 
-#import eyetracker
-from eyetracker import eyetracker
-
 #functions to run in seperate processes
 from world import world
 from eye import eye
@@ -192,10 +189,7 @@ def launcher():
                   ipc_push_url,
                   user_dir,
                   app_version,
-                  )).start()                         
-    Process(target=eyetracker,
-            name= 'eyetracker').start()
-
+                  )).start()
 
     with Prevent_Idle_Sleep():
         while True:
