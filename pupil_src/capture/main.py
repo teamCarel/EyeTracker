@@ -11,9 +11,6 @@ See COPYING and COPYING.LESSER for license details.
 
 import os, sys, platform
 
-#sys.argv.append('profiled')
-#sys.argv.append('debug')
-#sys.argv.append('service')
 
 app = 'service'
 pupil_base_dir = os.path.abspath(__file__).rsplit('pupil_src', 1)[0]

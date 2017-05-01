@@ -1,17 +1,17 @@
-2017-04-08 21:21:23,102 - MainProcess - [INFO] os_utils: Disabling idle sleep not supported on this OS version.
-2017-04-08 21:21:24,836 - world - [INFO] world: Application Version: 1.0
-2017-04-08 21:21:24,836 - world - [INFO] world: System Info: User: tora, Platform: Linux, Machine: tora-pc, Release: 4.8.0-46-generic, Version: #49~16.04.1-Ubuntu SMP Fri Mar 31 14:51:03 UTC 2017
-2017-04-08 21:21:24,839 - world - [INFO] pupil_detectors.build: Building extention modules...
-2017-04-08 21:21:25,254 - world - [INFO] calibration_routines.optimization_calibration.build: Building extention modules...
-2017-04-08 21:21:25,904 - world - [ERROR] video_capture.uvc_backend: Init failed. Capture is started in ghost mode. No images will be supplied.
-2017-04-08 21:21:25,905 - world - [INFO] plugin: Loaded: UVC_Source
-2017-04-08 21:21:25,905 - world - [INFO] plugin: Loaded: Pupil_Data_Relay
-2017-04-08 21:21:25,905 - world - [INFO] plugin: Loaded: Dummy_Gaze_Mapper
-2017-04-08 21:21:25,906 - world - [INFO] plugin: Loaded: Screen_Marker_Calibration
-2017-04-08 21:21:25,907 - world - [INFO] plugin: Loaded: Pupil_Remote
-2017-04-08 21:21:25,908 - world - [WARNING] world: Process started.
-2017-04-08 21:21:25,947 - world - [WARNING] plugin: Pupil_Remote: Update will be deprecated soon. Use 'recent_events instead.'
-2017-04-08 21:21:25,947 - world - [WARNING] plugin: Dummy_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
-2017-04-08 21:21:27,765 - eye0 - [INFO] pupil_detectors.build: Building extention modules...
-2017-04-08 21:21:28,142 - eye0 - [ERROR] video_capture.uvc_backend: Init failed. Capture is started in ghost mode. No images will be supplied.
-2017-04-08 21:21:28,330 - eye0 - [WARNING] eye: Process started.
+2017-05-01 17:35:04,277 - MainProcess - [INFO] os_utils: Disabling idle sleep not supported on this OS version.
+2017-05-01 17:35:04,581 - world - [INFO] world: Application Version: 1.0
+2017-05-01 17:35:04,581 - world - [INFO] world: System Info: User: tora, Platform: Linux, Machine: tora-pc, Release: 4.8.0-46-generic, Version: #49~16.04.1-Ubuntu SMP Fri Mar 31 14:51:03 UTC 2017
+2017-05-01 17:35:04,583 - world - [INFO] pupil_detectors.build: Building extention modules...
+2017-05-01 17:35:04,967 - world - [INFO] calibration_routines.optimization_calibration.build: Building extention modules...
+2017-05-01 17:35:05,562 - world - [ERROR] video_capture.uvc_backend: Init failed. Capture is started in ghost mode. No images will be supplied.
+2017-05-01 17:35:05,562 - world - [INFO] plugin: Loaded: UVC_Source
+2017-05-01 17:35:05,562 - world - [INFO] plugin: Loaded: Pupil_Data_Relay
+2017-05-01 17:35:05,562 - world - [INFO] plugin: Loaded: Dummy_Gaze_Mapper
+2017-05-01 17:35:05,563 - world - [INFO] plugin: Loaded: Screen_Marker_Calibration
+2017-05-01 17:35:05,563 - world - [INFO] plugin: Loaded: Pupil_Remote
+2017-05-01 17:35:05,564 - world - [WARNING] world: Process started.
+2017-05-01 17:35:05,584 - world - [WARNING] plugin: Pupil_Remote: Update will be deprecated soon. Use 'recent_events instead.'
+2017-05-01 17:35:05,584 - world - [WARNING] plugin: Dummy_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
+2017-05-01 17:35:05,924 - eye0 - [INFO] pupil_detectors.build: Building extention modules...
+2017-05-01 17:35:06,292 - eye0 - [ERROR] video_capture.uvc_backend: Init failed. Capture is started in ghost mode. No images will be supplied.
+2017-05-01 17:35:06,480 - eye0 - [WARNING] eye: Process started.
