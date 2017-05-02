@@ -230,7 +230,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     
     Process(target=et_object.calibrate,name='calib').start()
     Process(target=et_object.showEyeCam,name='showeye').start()
-    Process(target=et_object.tiledetection,name='showeye').start()
+    #SProcess(target=et_object.tileDetection,name='showeye',args=(3,3,)).start()
 
 
     # Event loop
