@@ -55,6 +55,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     
     #import eyetracker
     from eyetracker import Eyetracker
+    from eyetracker import eyetrackOld
 
     # networking
     import zmq
@@ -227,7 +228,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     # TODO start in launcher?
     ipc_pub.notify({'subject':'eye_process.should_start','eye_id' : 0})    
     
-    Process(target=et_object.calibrate(),name='calib').start()
+    Process(target=et_object.calibrate,name='calib').start()
 
 
     # Event loop

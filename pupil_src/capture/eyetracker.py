@@ -16,86 +16,95 @@ class Eyetracker():
         print("tracker started")
         ctx = zmq.Context()
         # create communication sockets
-        self.ipc_pub = zmq_tools.Msg_Dispatcher(ctx, ipc_push_url)
-        self.ipc_sub = zmq_tools.Msg_Receiver(ctx, ipc_sub_url)#, topics=('notify','gaze',))
+        self.ipc_push_url = ipc_push_url
+        self.ipc_sub_url = ipc_sub_url
         #TODO user settigns directory?
         #self.user_dir = user_dir
         #dictionary for computed screen limits
         self.screen_limits = {'x_min' : sys.maxsize, 'x_max' : -sys.maxsize -1, 'y_min' : sys.maxsize, 'y_max' : -sys.maxsize -1, 'x_range': None, 'y_range': None}
        
     def showEyeCam(self):
-        self.ipc_pub.notify({'subject':'show_eye_cam'})
+        ctx = zmq.Context()
+        ipc_pub = zmq_tools.Msg_Dispatcher(ctx, self.ipc_push_url)
+        ipc_pub.notify({'subject':'show_eye_cam'})
     
     def closeAll(self):
-        self.ipc_pub.notify({'subject':'eye_process.should_stop'}) 
-        self.ipc_pub.notify({'subject':'launcher_process.should_stop'})
-        
+        ctx = zmq.Context()
+        ipc_pub = zmq_tools.Msg_Dispatcher(ctx, self.ipc_push_url)
+        ipc_pub.notify({'subject':'show_eye_cam'})
+        ipc_pub.notify({'subject':'eye_process.should_stop'}) 
+        ipc_pub.notify({'subject':'launcher_process.should_stop'})
     def calibrate(self):
-        self.ipc_pub.notify({'subject':'calibration.should_start'})  
-        self.ipc_sub.subscribe('notify') 
-        self.ipc_sub.subscribe('gaze')
-        while True:
-            topic,payload = self.ipc_sub.recv()
-            if('calibration.failed' in topic):
-                self.ipc_sub.unsubscribe('notify')
-                self.ipc_sub.unsubscribe('gaze')
-                #reset x and y ranges to signalize failed calibration
-                self.screen_limits['x_range'] = None
-                self.screen_limits['y_range'] = None
-                
-            elif('calibration.successfull' in topic):
-                self.ipc_sub.unsubscribe('notify')
-                self.ipc_sub.unsubscribe('gaze')
-                self.screen_limits['x_range'] = self.screen_limits['x_max']-self.screen_limits['x_min']
-                self.screen_limits['y_range'] = self.screen_limits['y_max']-self.screen_limits['y_min']
-                break
-            elif('gaze' in topic):
-                #TODO test if b'... is needed
-                gaze_pos = msgpack.unpack(payload)[b'norm_pos']
-                # recalibrate screen limits
-                #if(gaze_pos[0] < 1 & gaze_pos[0] > 0 & gaze_pos[1] < 1  & gaze_pos[1] > 0):
-                if(gaze_pos < (1,1) & gaze_pos > (0,0)):
-                    self.screen_limits['x_min'] = min(gaze_pos[0],self.screen_limits['x_min'])
-                    self.screen_limits['y_min'] = min(gaze_pos[1],self.screen_limits['y_min'])
-                    self.screen_limits['x_max'] = max(gaze_pos[0],self.screen_limits['x_max'])
-                    self.screen_limits['y_max'] = max(gaze_pos[1],self.screen_limits['y_max'])
-                    
+        sleep(10)
+        ctx = zmq.Context()
+        ipc_pub = zmq_tools.Msg_Dispatcher(ctx, self.ipc_push_url)
+        ipc_sub = zmq_tools.Msg_Receiver(ctx, self.ipc_sub_url, topics=('notify','gaze',))
+        ipc_pub.notify({'subject':'calibration.should_start'})  
+        ipc_sub.subscribe('notify') 
+        ipc_sub.subscribe('gaze')
+        calib_end = False
+        while not calib_end:
+            print("test")
+            while ipc_sub.new_data:
+                topic,payload = ipc_sub.recv()
+                if('calibration.failed' in topic):
+                    #reset x and y ranges to signalize failed calibration
+                    self.screen_limits['x_range'] = None
+                    self.screen_limits['y_range'] = None
+                    calib_end = True
+                elif('calibration.successful' in topic):
+                    self.screen_limits['x_range'] = self.screen_limits['x_max']-self.screen_limits['x_min']
+                    self.screen_limits['y_range'] = self.screen_limits['y_max']-self.screen_limits['y_min']
+                    calib_end = True
+                elif('gaze' in topic):
+                    #TODO test if b'... is needed
+                    gaze_pos = msgpack.unpack(payload)[b'norm_pos']
+                    # recalibrate screen limits
+                    #if(gaze_pos[0] < 1 & gaze_pos[0] > 0 & gaze_pos[1] < 1  & gaze_pos[1] > 0):
+                    if(gaze_pos < (1,1) & gaze_pos > (0,0)):
+                        self.screen_limits['x_min'] = min(gaze_pos[0],self.screen_limits['x_min'])
+                        self.screen_limits['y_min'] = min(gaze_pos[1],self.screen_limits['y_min'])
+                        self.screen_limits['x_max'] = max(gaze_pos[0],self.screen_limits['x_max'])
+                        self.screen_limits['y_max'] = max(gaze_pos[1],self.screen_limits['y_max'])
+                        
     def tileDetection(self,cols,rows):
         if(self.screen_limits['x_range'] == None | self.screen_limits['y_range'] == None):
             print("error: not calibrated")
             return -1
-        self.ipc_sub.subscribe('gaze')
+        ctx = zmq.Context()
+        ipc_sub = zmq_tools.Msg_Receiver(ctx, self.ipc_sub_url, topics=('gaze',))
         x_range_step = self.screen_limits['x_range'] / cols
         y_range_step = self.screen_limits['y_range'] / rows
         timestamp_old = 0
         tile_dict = {}
         for i in range(cols * rows): tile_dict[i]=set()
-        while True:
-            topic,payload = self.ipc_sub.recv()
-            #TODO test if b'... is needed
-            unpacked = msgpack.unpack(payload)
-            gaze_pos = unpacked[b'norm_pos']
-            confidence = unpacked[b'confidence']
-            timestamp_new = int(unpacked[b'timestamp'])
-            if(timestamp_old == 0): timestamp_old = timestamp_new
-            elif(timestamp_old != timestamp_new):
-                selected_tile = None
-                selected_len = 0;
-                for i in tile_dict.keys():
-                    for tile_timestamp in tile_dict[i]:
-                        #remove old data from set
-                        if(timestamp_new - tile_timestamp > watch_interval): tile_dict[i].remove(tile_timestamp)
-                    if(tile_dict[i].len() > watch_interval * watch_threshold & selected_len < tile_dict[i].len()):
-                        selected_tile = i
-                        selected_len = tile_dict[i].len()
-                if(selected_tile != None): return selected_tile           
-            #filter out errors
-            if(gaze_pos < (self.screen_limits['x_max'],self.screen_limits['y_max']) & gaze_pos > (self.screen_limits['x_min'],self.screen_limits['y_min']) & confidence > conf_threshold):
-                tile_x = floor((gaze_pos[0] - self.screen_limits['x_min']) / x_range_step)
-                tile_y = floor((gaze_pos[1] - self.screen_limits['x_min']) / y_range_step)
-                #add new timestamp to set
-                tile_dict[tile_x*tile_y].add(timestamp_new)
-            timestamp_old = timestamp_new
+        while ipc_sub.new_data:
+            while True:
+                topic,payload = ipc_sub.recv()
+                #TODO test if b'... is needed
+                unpacked = msgpack.unpack(payload)
+                gaze_pos = unpacked[b'norm_pos']
+                confidence = unpacked[b'confidence']
+                timestamp_new = int(unpacked[b'timestamp'])
+                if(timestamp_old == 0): timestamp_old = timestamp_new
+                elif(timestamp_old != timestamp_new):
+                    selected_tile = None
+                    selected_len = 0;
+                    for i in tile_dict.keys():
+                        for tile_timestamp in tile_dict[i]:
+                            #remove old data from set
+                            if(timestamp_new - tile_timestamp > watch_interval): tile_dict[i].remove(tile_timestamp)
+                        if(tile_dict[i].len() > watch_interval * watch_threshold & selected_len < tile_dict[i].len()):
+                            selected_tile = i
+                            selected_len = tile_dict[i].len()
+                    if(selected_tile != None): return selected_tile           
+                #filter out errors
+                if(gaze_pos < (self.screen_limits['x_max'],self.screen_limits['y_max']) & gaze_pos > (self.screen_limits['x_min'],self.screen_limits['y_min']) & confidence > conf_threshold):
+                    tile_x = floor((gaze_pos[0] - self.screen_limits['x_min']) / x_range_step)
+                    tile_y = floor((gaze_pos[1] - self.screen_limits['x_min']) / y_range_step)
+                    #add new timestamp to set
+                    tile_dict[tile_x*tile_y].add(timestamp_new)
+                timestamp_old = timestamp_new
 #old function for testing
 def eyetrackOld():  
     #printListeners()
