@@ -229,6 +229,8 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     ipc_pub.notify({'subject':'eye_process.should_start','eye_id' : 0})    
     
     Process(target=et_object.calibrate,name='calib').start()
+    Process(target=et_object.showEyeCam,name='showeye').start()
+    Process(target=et_object.tiledetection,name='showeye').start()
 
 
     # Event loop
