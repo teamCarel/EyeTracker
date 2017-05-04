@@ -279,26 +279,26 @@ def eye(timebase, is_alive_flag, ipc_pub_url, ipc_sub_url, ipc_push_url,
         # setup GUI
         g_pool.gui = ui.UI()
         #g_pool.gui.scale = 1
-        g_pool.sidebar = ui.Scrolling_Menu("Settings",
-                                           pos=(-300, 0),
-                                           size=(0, 0),
-                                           header_pos='left')
-        general_settings = ui.Growing_Menu('Camera Mode')
-        general_settings.append(ui.Selector('display_mode',
-                                            g_pool,
-                                            setter=set_display_mode_info,
-                                            selection=['camera_image','roi','algorithm'],
-                                            labels=['Camera Image', 'Region Of Interest', 'Algorithm'],
-                                            label="Mode")
-                                            )
-        g_pool.display_mode_info = ui.Info_Text(g_pool.display_mode_info_text[g_pool.display_mode])
-
-        general_settings.append(g_pool.display_mode_info)
-        g_pool.gui.append(g_pool.sidebar)
-        g_pool.sidebar.append(general_settings)
-
-        g_pool.pupil_detector.init_gui(g_pool.sidebar)
-        g_pool.writer = None
+#         g_pool.sidebar = ui.Scrolling_Menu("Settings",
+#                                            pos=(-300, 0),
+#                                            size=(0, 0),
+#                                            header_pos='left')
+#         general_settings = ui.Growing_Menu('Camera Mode')
+#         general_settings.append(ui.Selector('display_mode',
+#                                             g_pool,
+#                                             setter=set_display_mode_info,
+#                                             selection=['camera_image','roi','algorithm'],
+#                                             labels=['Camera Image', 'Region Of Interest', 'Algorithm'],
+#                                             label="Mode")
+#                                             )
+#         g_pool.display_mode_info = ui.Info_Text(g_pool.display_mode_info_text[g_pool.display_mode])
+# 
+#         general_settings.append(g_pool.display_mode_info)
+#         g_pool.gui.append(g_pool.sidebar)
+#         g_pool.sidebar.append(general_settings)
+# 
+#         g_pool.pupil_detector.init_gui(g_pool.sidebar)
+#         g_pool.writer = None
 
         def replace_manager(manager_class):
             g_pool.capture_manager.cleanup()
@@ -344,8 +344,7 @@ def eye(timebase, is_alive_flag, ipc_pub_url, ipc_sub_url, ipc_push_url,
                 t, notification = notify_sub.recv()
                 subject = notification['subject']
                 if subject == 'eye_process.should_stop':
-                    if notification['eye_id'] == eye_id:
-                        break
+                    break
                 elif subject == 'show_eye_cam':
                     
                     glfw.glfwShowWindow(main_window)

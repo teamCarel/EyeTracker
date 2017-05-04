@@ -55,7 +55,6 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     
     #import eyetracker
     from eyetracker import Eyetracker
-    from eyetracker import eyetrackOld
 
     # networking
     import zmq
@@ -153,23 +152,16 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
         return next(tick)
 
     g_pool.detection_mapping_mode = '3d'
-#     g_pool.active_gaze_mapping_plugin = Gaze_Mapper_Plugin(g_pool)
 
-#     def launch_eye_process(eye_id, delay=0):
-#         n = {'subject': 'eye_process.should_start.{}'.format(eye_id),
-#              'eye_id': eye_id, 'delay': delay}
-#         ipc_pub.notify(n)
-#  
-#     def stop_eye_process(eye_id):
-#         n = {'subject': 'eye_process.should_stop', 'eye_id': eye_id}
-#         ipc_pub.notify(n)
- 
-#     def start_stop_eye(eye_id, make_alive):
-#         if make_alive:
-#             launch_eye_process(eye_id)
-#         else:
-#             stop_eye_process(eye_id)
-
+    # window and gl setup
+    glfw.glfwInit()
+    main_window = glfw.glfwCreateWindow(1, 1, "Pupil World Backend")
+    glfw.glfwSetWindowPos(main_window, -1, -1)
+    glfw.glfwMakeContextCurrent(main_window)
+    cygl.utils.init()
+    g_pool.main_window = main_window
+    
+    #notification handling
     def handle_notifications(n):
         subject = n['subject']
         if subject == 'set_detection_mapping_mode':
@@ -196,14 +188,9 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
                     ipc_pub.notify({'subject': 'meta.doc',
                                     'actor': p.class_name,
                                     'doc': p.on_notify.__doc__})
+        elif subject.startswith('world_process.should_stop'):
+            glfw.glfwSetWindowShouldClose(main_window,True)
 
-    # window and gl setup
-    glfw.glfwInit()
-    main_window = glfw.glfwCreateWindow(1, 1, "Pupil World Backend")
-    glfw.glfwSetWindowPos(main_window, -1, -1)
-    glfw.glfwMakeContextCurrent(main_window)
-    cygl.utils.init()
-    g_pool.main_window = main_window
 
     # plugins that are loaded based on user settings from previous session
     g_pool.plugins = Plugin_List(g_pool, plugin_by_name, default_plugins)
@@ -225,12 +212,9 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     et_object = Eyetracker(ipc_push_url, ipc_sub_url);
     
     #start eye process
-    # TODO start in launcher?
     ipc_pub.notify({'subject':'eye_process.should_start','eye_id' : 0})    
     
-    Process(target=et_object.calibrate,name='calib').start()
     Process(target=et_object.showEyeCam,name='showeye').start()
-    #SProcess(target=et_object.tileDetection,name='showeye',args=(3,3,)).start()
 
 
     # Event loop
@@ -290,19 +274,18 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     for p in g_pool.plugins:
         p.alive = False
     g_pool.plugins.clean()
-    g_pool.gui.terminate()
     glfw.glfwDestroyWindow(main_window)
     glfw.glfwTerminate()
 
     g_pool.capture.deinit_gui()
 
-    # shut down eye processes:
-    stop_eye_process(0)
-    stop_eye_process(1)
+
 
     logger.info("Process shutting down.")
     ipc_pub.notify({'subject': 'world_process.stopped'})
 
+    # shut down eye process
+    ipc_pub.notify({'subject':'eye_process.should_stop'})
     # shut down launcher
     n = {'subject': 'launcher_process.should_stop'}
     ipc_pub.notify(n)
