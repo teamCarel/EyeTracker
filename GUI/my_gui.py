@@ -25,7 +25,7 @@ class MyWindow():
         app = QtWidgets.QApplication(sys.argv)
         MainWindow = QtWidgets.QMainWindow()
         ui = Ui_MainWindow()
-        isCalibrated = 0
+        isCalibrated = False
         ui.setupUi(MainWindow)
         run = ui.Run.clicked.connect(self.runRun)
         MainWindow.show()
@@ -58,7 +58,7 @@ class MyWindow():
         return resolution
 
     def runRun(self):
-            if isCalibrated==1:
+            if isCalibrated:
                 global RunWindow
                 global run_ui
                 resolution = self.getResolution()
