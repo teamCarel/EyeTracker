@@ -1,6 +1,5 @@
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-import glob
+import glob, os
 
 class Ui_MainWindow():
     def setupUi(self, MainWindow):
@@ -96,10 +95,12 @@ class Ui_MainWindow():
         i = 0
         self.fieldPics = []
         self.fieldChecks = []
-        countfiles = len(glob.glob('pics/*'))
+
         source = []
-        source = source + glob.glob("pics/*.png")
-        source = source + glob.glob("pics/*.jpg")
+        print(os.getcwd())
+        source = source + glob.glob("/home/horacekv/Pupil/pupil/pupil_src/capture/GUI/pics/*.png")
+        source = source + glob.glob("/home/horacekv/Pupil/pupil/pupil_src/capture/GUI/pics/*.jpg")
+        countfiles = len(source)
         for filename in source:
             self.fieldPics.append(countfiles) 
             self.fieldChecks.append(countfiles)

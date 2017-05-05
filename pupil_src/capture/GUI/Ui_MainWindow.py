@@ -2,12 +2,19 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import glob, os
 
 class Ui_MainWindow():
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow, pictureSource):
+        self.pictureSource=pictureSource
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(471, 640)
+        MainWindow.setFixedSize(471, 640)
         MainWindow.setWindowTitle("Eye Tracker")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        
+        self.Help = QtWidgets.QPushButton(self.centralwidget)
+        self.Help.setGeometry(QtCore.QRect(430, 10, 30, 30))
+        self.Help.setStyleSheet("border-radius: 15px;")
+        self.Help.setObjectName("Help")
+        self.Help.setText("?")
 
         self.Exit = QtWidgets.QPushButton(self.centralwidget)
         self.Exit.setGeometry(QtCore.QRect(10, 600, 111, 31))
@@ -45,7 +52,6 @@ class Ui_MainWindow():
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setGeometry(QtCore.QRect(60, 100, 69, 22))
         self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItem("1x2")
         self.comboBox.addItem("2x2")
         self.comboBox.addItem("3x3")
         self.comboBox.addItem("4x3")
@@ -98,8 +104,9 @@ class Ui_MainWindow():
 
         source = []
         print(os.getcwd())
-        source = source + glob.glob("/home/horacekv/Pupil/pupil/pupil_src/capture/GUI/pics/*.png")
-        source = source + glob.glob("/home/horacekv/Pupil/pupil/pupil_src/capture/GUI/pics/*.jpg")
+        source = source + glob.glob(self.pictureSource+"*.png")
+        source = source + glob.glob(self.pictureSource+"*.jpg")
+        source = source + glob.glob(self.pictureSource+"*.bmp")
         countfiles = len(source)
         for filename in source:
             self.fieldPics.append(countfiles) 

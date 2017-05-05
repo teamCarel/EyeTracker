@@ -73,7 +73,7 @@ class Eyetracker():
                             selected_len = len(tile_dict[i])
                     if(selected_tile != None):
                         arr = selected_tile.split(':')
-                        return {'x':int(arr[0]),'y':rows-int(arr[1])}
+                        return {'x':int(arr[0]),'y':cols-int(arr[1])-1}
                     tile_dict = tile_dict_new       
                 #filter out errors
                 if((gaze_pos[0] < 1) & (gaze_pos[1] < 1) & (gaze_pos[0] > 0) & (gaze_pos[1] > 0) & (confidence > conf_threshold)):

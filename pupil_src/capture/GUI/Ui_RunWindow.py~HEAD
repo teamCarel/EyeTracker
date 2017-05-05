@@ -15,8 +15,8 @@ class Ui_RunWindow():
         i = 0
         j = 0
         source = []
-        source = source + glob.glob("pics/*.png")
-        source = source + glob.glob("pics/*.jpg")
+        source = source + glob.glob("/home/horacekv/Pupil/pupil/pupil_src/capture/GUI/pics/*.png")
+        source = source + glob.glob("/home/horacekv/Pupil/pupil/pupil_src/capture/GUI/pics/*.jpg")
         self.field = []
         for i in range(row):
             for j in range(column):
@@ -32,16 +32,19 @@ class Ui_RunWindow():
                 self.gridLayout.addWidget(label, i, j, 1, 1, QtCore.Qt.AlignCenter)
         
 
-        
+        self.Run = QtWidgets.QPushButton(self.centralwidget)
+        self.Run.setGeometry(QtCore.QRect(10, 10, 50, 20))
+        self.Run.setObjectName("Run eye detection")
+        self.Run.setText("Run")
         
         self.Exit = QtWidgets.QPushButton(self.centralwidget)
-        self.Exit.setGeometry(QtCore.QRect(10, 10, 50, 20))
+        self.Exit.setGeometry(QtCore.QRect(10, 30, 50, 20))
         self.Exit.setObjectName("ExitWindow")
         self.Exit.setText("Exit")
 
 
         self.ExitAll = QtWidgets.QPushButton(self.centralwidget)
-        self.ExitAll.setGeometry(QtCore.QRect(10, 30, 50, 20))
+        self.ExitAll.setGeometry(QtCore.QRect(10, 50, 50, 20))
         self.ExitAll.setObjectName("Exit All")
         self.ExitAll.setText("Exit All")
 

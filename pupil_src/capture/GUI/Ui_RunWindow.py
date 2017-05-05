@@ -2,7 +2,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import glob
 
 class Ui_RunWindow():
-    def setupUi(self, RunWindow, row, column, pictures):
+    def setupUi(self, RunWindow, row, column, pictures, pictureSource):
+        
+        self.pictureSource=pictureSource
         self.row=row
         self.column=column
         RunWindow.setObjectName("RunWindow")
@@ -15,13 +17,22 @@ class Ui_RunWindow():
         i = 0
         j = 0
         source = []
-        source = source + glob.glob("/home/horacekv/Pupil/pupil/pupil_src/capture/GUI/pics/*.png")
-        source = source + glob.glob("/home/horacekv/Pupil/pupil/pupil_src/capture/GUI/pics/*.jpg")
+        source = source + glob.glob(self.pictureSource+"*.png")
+        source = source + glob.glob(self.pictureSource+"*.jpg")
+        source = source + glob.glob(self.pictureSource+"*.bmp")
         self.field = []
         for i in range(row):
             for j in range(column):
                 self.field.append(row*column)
                 pixmap = QtGui.QPixmap(source[pictures[i*column+j]])
+                
+                if pixmap.width() > (screen.width()/column) or pixmap.height() > (screen.height()/row):
+                    if pixmap.width()>pixmap.height():
+                        scale = (screen.width()/column)/pixmap.width()
+                    else:
+                        scale = (screen.height()/row)/pixmap.height()
+                    pixmap = pixmap.scaled( pixmap.width()*scale,pixmap.height()*scale,QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.FastTransformation)
+                
                 label = QtWidgets.QLabel(self.centralwidget)
 
                 label.setText("")
