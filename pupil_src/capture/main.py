@@ -178,6 +178,7 @@ def launcher():
     cmd_sub = zmq_tools.Msg_Receiver(zmq_ctx,ipc_sub_url,topics=topics )
     cmd_push = zmq_tools.Msg_Dispatcher(zmq_ctx,ipc_push_url)
 
+    # run world process
     Process(target=world, name= 'world',
             args=(timebase,
                   eyes_are_alive,
@@ -187,7 +188,8 @@ def launcher():
                   user_dir,
                   app_version,
                   )).start()
-
+                  
+                  
     with Prevent_Idle_Sleep():
         while True:
             #block and listen for relevant messages.

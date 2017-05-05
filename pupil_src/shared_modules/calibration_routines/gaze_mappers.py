@@ -283,7 +283,6 @@ class Vector_Gaze_Mapper(Monocular_Gaze_Mapper_Base,Gaze_Mapping_Plugin):
 
     def cleanup(self):
         super().cleanup()
-        self.deinit_gui()
         self.visualizer.close_window()
 
 
