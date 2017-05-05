@@ -52,9 +52,6 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     # general imports
     import logging
     from multiprocessing import Process
-    
-    #import eyetracker
-    from eyetracker import Eyetracker
 
     # networking
     import zmq
@@ -107,6 +104,14 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     #from frame_publisher import Frame_Publisher
     from blink_detection import Blink_Detection
     from pupil_data_relay import Pupil_Data_Relay
+    
+    from time import sleep
+    
+    #import eyetracker
+    from eyetracker import Eyetracker
+    
+    #import gui
+    from GUI.my_gui import MyWindow
 
     # g_pool holds variables for this process they are accesible to all plugins
     g_pool = Global_Container()
@@ -208,13 +213,12 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     ipc_pub.notify({'subject': 'world_process.started'})
     logger.warning('Process started.')
     
-    #create eyetracker object
-    et_object = Eyetracker(ipc_push_url, ipc_sub_url);
-    
     #start eye process
-    ipc_pub.notify({'subject':'eye_process.should_start','eye_id' : 0})    
+    ipc_pub.notify({'subject':'eye_process.should_start','eye_id' : 0})
     
-    Process(target=et_object.showEyeCam,name='showeye').start()
+    gui_obj = MyWindow(Eyetracker(ipc_push_url,ipc_sub_url))
+    sleep(1)
+    Process(target = gui_obj.startGui,name="gui").start()
 
 
     # Event loop

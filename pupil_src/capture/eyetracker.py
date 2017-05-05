@@ -15,8 +15,7 @@ class Eyetracker():
     #TODO documentation
 
     def __init__(self,ipc_push_url,ipc_sub_url):#, user_dir):
-        ctx = zmq.Context()
-        # create communication sockets
+        # save communication sockets urls
         self.ipc_push_url = ipc_push_url
         self.ipc_sub_url = ipc_sub_url
 
@@ -43,17 +42,16 @@ class Eyetracker():
                     return True
                         
     def tileDetection(self,cols,rows):
-        print("tile")
-        if( (self.screen_limits['x_range'] == None) | (self.screen_limits['y_range'] == None) ):
-            print("error: not calibrated")
-            return -1
+        print("tile detect started")
         ctx = zmq.Context()
         ipc_sub = zmq_tools.Msg_Receiver(ctx, self.ipc_sub_url, topics=('gaze',))
-        x_range_step = self.screen_limits['x_range'] / cols
-        y_range_step = self.screen_limits['y_range'] / rows
+        x_range_step = 1 / (cols - 1)
+        y_range_step = 1 / (rows - 1)
         timestamp_old = 0
         tile_dict = {}
-        for i in range(cols * rows): tile_dict[i]=set()
+        for x in range(cols): 
+            for y in range(rows): 
+                tile_dict[str(x)+':'+str(y)]=set()
         sleep(1)#musi tu byt bez toho nefunguje
         while ipc_sub.new_data:
             while True:
@@ -73,14 +71,14 @@ class Eyetracker():
                         if((len(tile_dict[i]) > watch_interval * watch_threshold) & (selected_len < len(tile_dict[i]))):
                             selected_tile = i
                             selected_len = len(tile_dict[i])
-                    if(selected_tile != None): 
-                        return selected_tile   
+                    if(selected_tile != None):
+                        arr = selected_tile.split(':')
+                        return {'x':int(arr[0]),'y':rows-int(arr[1])}
                     tile_dict = tile_dict_new       
                 #filter out errors
                 if((gaze_pos[0] < 1) & (gaze_pos[1] < 1) & (gaze_pos[0] > 0) & (gaze_pos[1] > 0) & (confidence > conf_threshold)):
                     tile_x = floor(gaze_pos[0] / x_range_step)
                     tile_y = floor(gaze_pos[1] / y_range_step)
                     #add new timestamp to set
-                    print(tile_x+tile_y*cols)
-                    tile_dict[tile_x+tile_y*cols].add(timestamp_new)
+                    tile_dict[str(tile_x)+':'+str(tile_y)].add(timestamp_new)
                 timestamp_old = timestamp_new
