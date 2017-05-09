@@ -94,7 +94,7 @@ def eye(timebase, is_alive_flag, ipc_pub_url, ipc_sub_url, ipc_push_url,
         # display
         import glfw
         from pyglui import ui, cygl
-        #from pyglui.cygl.utils import draw_points, RGBA, draw_polyline
+        from pyglui.cygl.utils import draw_points, RGBA, draw_polyline
         from pyglui.cygl.utils import Named_Texture
         from gl_utils import basic_gl_setup, adjust_gl_view, clear_gl_screen
         from gl_utils import make_coord_system_pixel_based

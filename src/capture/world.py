@@ -91,24 +91,22 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     from plugin import Plugin, Plugin_List
     # Calibration
     from calibration_routines.screen_marker_calibration import Screen_Marker_Calibration as Calibration_Plugin
-    # Gaze mapping #TODO: Change to Monocular?
     from calibration_routines.gaze_mappers import Dummy_Gaze_Mapper as Gaze_Mapper_Plugin
-    # Video Source #TODO: change to UVC
     from video_capture.uvc_backend import UVC_Source as Video_Source_Plugin
 
 
     #TODO needed?
-    #from pupil_remote import Pupil_Remote
+    from pupil_remote import Pupil_Remote
     #from blink_detection import Blink_Detection
-    #from pupil_data_relay import Pupil_Data_Relay
+    from pupil_data_relay import Pupil_Data_Relay
     
     from time import sleep
     
     #import eyetracker
-    from eyetracker.eyetracker import Eyetracker
+    from eyetracker import Eyetracker
     
     #import gui
-    from eyetracker.GUI.my_gui import MyWindow
+    from GUI.my_gui import MyWindow
 
     # g_pool holds variables for this process they are accesible to all plugins
     g_pool = Global_Container()
@@ -130,7 +128,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     g_pool.get_now = get_time_monotonic
 
     # manage plugins
-    plugin_by_index = [Gaze_Mapper_Plugin,Calibration_Plugin,Video_Source_Plugin]#,Pupil_Data_Relay,Pupil_Remote, Blink_Detection]
+    plugin_by_index = [Gaze_Mapper_Plugin,Calibration_Plugin,Video_Source_Plugin,Pupil_Data_Relay,Pupil_Remote]#, Blink_Detection]
     name_by_index = [p.__name__ for p in plugin_by_index]
     plugin_by_name = dict(zip(name_by_index, plugin_by_index))
 
@@ -141,12 +139,12 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     } 
     
     default_plugins = [("UVC_Source", default_capture_settings),
-                       #('Pupil_Data_Relay', {}),
+                       ('Pupil_Data_Relay', {}),
                        ('UVC_Manager', {}),
-                       #('Dummy_Gaze_Mapper', {}),
-                       ('Screen_Marker_Calibration', {})]
-                       #('Pupil_Remote', {}),
-                       #('Fixation_Detector_3D', {})]
+                       ('Dummy_Gaze_Mapper', {}),
+                       ('Screen_Marker_Calibration', {}),
+                       ('Pupil_Remote', {}),
+                       ('Fixation_Detector_3D', {})]
 
     tick = delta_t()
 

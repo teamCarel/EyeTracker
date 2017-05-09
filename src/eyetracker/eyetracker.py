@@ -66,7 +66,7 @@ class Eyetracker():
                 elif('calibration.successful' in topic):
                     return True
                         
-    def tileDetection(self,cols,rows):
+    def tileDetection(self,rows,cols):
         """
         cols = columns of image grid
         rows = rows of image grid
@@ -88,8 +88,8 @@ class Eyetracker():
         sleep(1)
         #reset timestamps
         ipc_pub.notify({'subject':'T 0'})
-        x_range_step = 1 / (cols - 1)
-        y_range_step = 1 / (rows - 1)
+        x_range_step = 1 / cols
+        y_range_step = 1 / rows
         timestamp_old = 0
         tile_dict = {}
         for x in range(cols): 
@@ -102,6 +102,7 @@ class Eyetracker():
                 topic,payload = ipc_sub.recv()
                 gaze_pos = payload['norm_pos']
                 confidence = payload['confidence']
+                #print(gaze_pos," ",confidence)
                 timestamp_new = int(payload['timestamp'])
                 if(timestamp_old == 0): timestamp_old = timestamp_new
                 elif(timestamp_old != timestamp_new):
@@ -117,13 +118,15 @@ class Eyetracker():
                             selected_len = len(tile_dict[i])
                     if(selected_tile != None):
                         arr = selected_tile.split(':')
-                        #return {'x':int(arr[0]),'y':cols-int(arr[1])-1}
-                        return {'x':int(arr[0]),'y':cols-int(arr[1])}
+                        print(selected_tile)
+                        return {'x':int(arr[0]),'y':rows-int(arr[1])-1}
+                        #return {'x':int(arr[0]),'y':cols-int(arr[1])}
                     tile_dict = tile_dict_new       
                 #filter out errors
                 if((gaze_pos[0] < 1) & (gaze_pos[1] < 1) & (gaze_pos[0] > 0) & (gaze_pos[1] > 0) & (confidence > conf_threshold)):
                     tile_x = floor(gaze_pos[0] / x_range_step)
                     tile_y = floor(gaze_pos[1] / y_range_step)
+                   #print(tile_x," ",tile_y)
                     #add new timestamp to set
                     tile_dict[str(tile_x)+':'+str(tile_y)].add(timestamp_new)
                 timestamp_old = timestamp_new

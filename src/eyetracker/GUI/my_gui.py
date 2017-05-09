@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QErrorMessage
 from PyQt5.QtWidgets import QMessageBox
 from random import randint
 from shutil import copyfile
-from eyetracker.eyetracker import Eyetracker
+from eyetracker import Eyetracker
 from time import sleep
 from multiprocessing import Process
 from threading import Thread
@@ -109,13 +109,10 @@ class MyWindow():
                 if((row*column) == len(pictures)):
                     RunWindow = QtWidgets.QMainWindow()
                     #RunWindow = self.app.QMainWindow()
-
                     screen = QtWidgets.QDesktopWidget().screenGeometry()
                     run_ui = Ui_RunWindow()
                     run_ui.setupUi(RunWindow, row, column, pictures, self.pictureSource, screen) ##rows, cols, field
-                    run_ui.Run.clicked.connect(self.runEyeDetection)
-                    run_ui.Exit.clicked.connect(self.runUiRunExit)
-                    run_ui.ExitAll.clicked.connect(self.runUiRunExitAll)
+
                     #Process(target=RunWindow.showFullScreen,name="window",).start()
                     RunWindow.showFullScreen()
                     RunWindow.repaint()
@@ -141,30 +138,28 @@ class MyWindow():
                 #TODO pořešit failnutej detect
                 print("failed")
             else:
-                Process(target=self.highlight,name="highlightTile",args=(tile['x'], tile['y']))
+                #Process(target=self.highlight,name="highlightTile",args=(tile['x'], tile['y'])).start()
+                self.highlight(tile['x'], tile['y'])
             #sleep(0.01)
 
-    def runUiRunExit(self):
-        print("exit")
-        self.runWin = False
-        RunWindow.close()
-
-    def runUiRunExitAll(self):
-        self.runWin = False
-        self.eyetracker_obj.closeAll()
-        RunWindow.close()
-        MainWindow.close()
+    #def runUiRunExitAll(self):
+     #   self.runWin = False
+      #  self.eyetracker_obj.closeAll()
+       # RunWindow.close()
+        #MainWindow.close()
 
     def runUiShowGridExit(self):
             ShowGridWindow.close()
 
     def highlight(self, x, y):
-        #print(x," ",y)
+        print(x," ",y)
+        global RunWindow
+        global run_ui
         run_ui.highlightPic(x, y)
-        RunWindow.repaint()
-        sleep(5)
+        #RunWindow.repaint()
+        sleep(2)
         run_ui.unHighlightPic(x, y)
-        RunWindow.repaint()
+        #RunWindow.repaint()
 
 
     def runAddPictures(self):

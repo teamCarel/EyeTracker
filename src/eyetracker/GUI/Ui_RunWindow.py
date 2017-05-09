@@ -2,6 +2,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import glob
 
 class Ui_RunWindow():
+
+    def eventFilter(self, obj, event):
+        if event.type() == QEvent.KeyPress:
+            if event.key() == Qt.Key_Escape:
+                self.close()
+        return super(MyMainWindow, self).eventFilter(obj, event)
+
+
     def setupUi(self, RunWindow, row, column, pictures, pictureSource, screen):
         
         self.pictureSource=pictureSource
@@ -11,7 +19,6 @@ class Ui_RunWindow():
         self.centralwidget = QtWidgets.QWidget(RunWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
-        self.gridLayout.setContentsMargins(5, 5, 5, 5)
         self.gridLayout.setObjectName("gridLayout")
 
         i = 0
@@ -26,43 +33,26 @@ class Ui_RunWindow():
                 self.field.append(row*column)
                 pixmap = QtGui.QPixmap(source[pictures[i*column+j]])
                 
-                if pixmap.width() > (screen.width()/column) or pixmap.height() > (screen.height()/row):
-                    if pixmap.width()>pixmap.height():
-                        scale = (screen.width()/column)/pixmap.width()
-                    else:
-                        scale = (screen.height()/row)/pixmap.height()
-                    pixmap = pixmap.scaled( pixmap.width()*scale,pixmap.height()*scale,QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.FastTransformation)
+
+
+                scalex = (screen.width()/column)/(pixmap.width()+10)
+                scaley = (screen.height()/row)/(pixmap.height()+10)
+                pixmap = pixmap.scaled(pixmap.width()*scalex,pixmap.height()*scaley,QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.FastTransformation)
                 
                 label = QtWidgets.QLabel(self.centralwidget)
 
                 label.setText("")
                 label.setPixmap(pixmap)
                 label.setObjectName("Pic")
-                label.setContentsMargins(10, 10, 10, 10)
                 self.field[len(self.field)-1] = label
                 self.gridLayout.addWidget(label, i, j, 1, 1, QtCore.Qt.AlignCenter)
         
-
-        self.Run = QtWidgets.QPushButton(self.centralwidget)
-        self.Run.setGeometry(QtCore.QRect(10, 10, 50, 20))
-        self.Run.setObjectName("Run eye detection")
-        self.Run.setText("Run")
-        
-        self.Exit = QtWidgets.QPushButton(self.centralwidget)
-        self.Exit.setGeometry(QtCore.QRect(10, 30, 50, 20))
-        self.Exit.setObjectName("ExitWindow")
-        self.Exit.setText("Exit")
-
-
-        self.ExitAll = QtWidgets.QPushButton(self.centralwidget)
-        self.ExitAll.setGeometry(QtCore.QRect(10, 50, 50, 20))
-        self.ExitAll.setObjectName("Exit All")
-        self.ExitAll.setText("Exit All")
-
         RunWindow.setCentralWidget(self.centralwidget)
         QtCore.QMetaObject.connectSlotsByName(RunWindow)
 
-    def highlightPic(self, row, col):
+    def highlightPic(self, col, row):
+        print(col+row*self.column)
         self.field[col+row*self.column].setStyleSheet("background-color: green")
-    def unHighlightPic(self, row, col):
+    def unHighlightPic(self, col, row):
         self.field[col+row*self.column].setStyleSheet("background-color: transparent")
+        

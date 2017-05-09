@@ -1,14 +1,18 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 import glob, os
 
 class Ui_MainWindow():
     def setupUi(self, MainWindow, pictureSource):
         self.pictureSource=pictureSource
         MainWindow.setObjectName("MainWindow")
-        MainWindow.setFixedSize(471, 640)
+        MainWindow.setFixedSize(471, 740)
         MainWindow.setWindowTitle("Eye Tracker")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        
+        font = QtGui.QFont()
+        font.setPointSize(12)
         
         self.Help = QtWidgets.QPushButton(self.centralwidget)
         self.Help.setGeometry(QtCore.QRect(430, 10, 30, 30))
@@ -16,42 +20,75 @@ class Ui_MainWindow():
         self.Help.setObjectName("Help")
         self.Help.setText("?")
 
-        self.Exit = QtWidgets.QPushButton(self.centralwidget)
-        self.Exit.setGeometry(QtCore.QRect(10, 600, 111, 31))
-        self.Exit.setObjectName("Exit")
-        self.Exit.setText("Exit")
-        self.Exit.clicked.connect(QtWidgets.QApplication.closeAllWindows)
 
-        self.showGrid = QtWidgets.QPushButton(self.centralwidget)
-        self.showGrid.setGeometry(QtCore.QRect(170, 600, 131, 31))
-        self.showGrid.setObjectName("ShowGrid")
-        self.showGrid.setText("Show Grid")
-
-        self.Run = QtWidgets.QPushButton(self.centralwidget)
-        self.Run.setGeometry(QtCore.QRect(340, 600, 111, 31))
-        self.Run.setObjectName("Run")
-        self.Run.setText("Run")
    
         self.cameraSettings = QtWidgets.QPushButton(self.centralwidget)
-        self.cameraSettings.setGeometry(QtCore.QRect(170, 20, 131, 31))
+        self.cameraSettings.setGeometry(QtCore.QRect(60, 30, 131, 30))
         self.cameraSettings.setObjectName("cameraSettings")
         self.cameraSettings.setText("Camera Settings")
 
         self.calibration = QtWidgets.QPushButton(self.centralwidget)
-        self.calibration.setGeometry(QtCore.QRect(170, 60, 131, 31))
+        self.calibration.setGeometry(QtCore.QRect(260, 30, 131, 30))
         self.calibration.setObjectName("calibration")
         self.calibration.setText("Calibration")
+        
+        self.timeLabel = QtWidgets.QLabel(self.centralwidget)
+        self.timeLabel.setGeometry(QtCore.QRect(20, 70, 131, 31))
+        self.timeLabel.setFont(font)
+        self.timeLabel.setObjectName("timeLabel")
+        self.timeLabel.setText("Capture time:")
+        
+        self.timeLabelVal = QtWidgets.QLabel(self.centralwidget)
+        self.timeLabelVal.setGeometry(QtCore.QRect(180,70,70,31))
+        self.timeLabelVal.setFont(font)
+        self.timeLabelVal.setText("3")
 
+        
+        self.time = QtWidgets.QSlider(self.centralwidget)
+        self.time.setOrientation(QtCore.Qt.Horizontal)
+        self.time.setGeometry(QtCore.QRect(200,70, 200, 31))
+        self.time.setMinimum(1)
+        self.time.setMaximum(10)
+        self.time.setValue(3)
+        self.time.valueChanged.connect(self.timeMoved)
+        
+
+        
+        self.xxLabel = QtWidgets.QLabel(self.centralwidget)
+        self.xxLabel.setGeometry(QtCore.QRect(20, 120, 150, 31))
+        self.xxLabel.setFont(font)
+        self.xxLabel.setObjectName("xxLabel")
+        self.xxLabel.setText("Capture percent:")
+        
+        self.percent = QtWidgets.QSlider(self.centralwidget)
+        self.percent.setOrientation(QtCore.Qt.Horizontal)
+        self.percent.setGeometry(QtCore.QRect(200 , 120, 200, 31))
+        self.percent.setMinimum(1)
+        self.percent.setMaximum(100)
+        self.percent.setValue(80)
+        
+        self.confLabel = QtWidgets.QLabel(self.centralwidget)
+        self.confLabel.setGeometry(QtCore.QRect(20, 160, 131, 31))
+        self.confLabel.setFont(font)
+        self.confLabel.setObjectName("confLabel")
+        self.confLabel.setText("Confidency:")
+        
+        self.conf = QtWidgets.QSlider(self.centralwidget)
+        self.conf.setOrientation(QtCore.Qt.Horizontal)
+        self.conf.setGeometry(QtCore.QRect(200, 160, 200, 31))
+        self.conf.setMinimum(1)
+        self.conf.setMaximum(100)
+        self.conf.setValue(90)
+        
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(20, 100, 51, 16))
-        font = QtGui.QFont()
-        font.setPointSize(12)
+        self.label.setGeometry(QtCore.QRect(20, 200, 51, 16))
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.label.setText("Grid:")
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox.setGeometry(QtCore.QRect(60, 100, 69, 22))
+        self.comboBox.setGeometry(QtCore.QRect(60, 200, 69, 22))
         self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("1x2")
         self.comboBox.addItem("2x2")
         self.comboBox.addItem("3x3")
         self.comboBox.addItem("4x3")
@@ -59,14 +96,14 @@ class Ui_MainWindow():
         self.comboBox.currentIndexChanged.connect(self.countSelected)  
 
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(20, 140, 71, 16))
+        self.label_2.setGeometry(QtCore.QRect(20, 240, 71, 16))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.label_2.setText("Selected:")
         self.selected = QtWidgets.QLabel(self.centralwidget)
-        self.selected.setGeometry(QtCore.QRect(90, 142, 47, 13))
+        self.selected.setGeometry(QtCore.QRect(90, 242, 47, 13))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.selected.setFont(font)
@@ -74,12 +111,12 @@ class Ui_MainWindow():
         
 
         self.addPictures = QtWidgets.QPushButton(self.centralwidget)
-        self.addPictures.setGeometry(QtCore.QRect(330, 140, 131, 31))
+        self.addPictures.setGeometry(QtCore.QRect(330, 240, 131, 31))
         self.addPictures.setObjectName("addPictures")
         self.addPictures.setText("Add pictures")
 
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setGeometry(QtCore.QRect(10, 180, 451, 405))
+        self.scrollArea.setGeometry(QtCore.QRect(10, 280, 451, 405))
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
@@ -91,6 +128,22 @@ class Ui_MainWindow():
 
         self.galery()
         
+        
+        self.Exit = QtWidgets.QPushButton(self.centralwidget)
+        self.Exit.setGeometry(QtCore.QRect(10, 700, 111, 31))
+        self.Exit.setObjectName("Exit")
+        self.Exit.setText("Exit")
+        self.Exit.clicked.connect(QtWidgets.QApplication.closeAllWindows)
+
+        self.showGrid = QtWidgets.QPushButton(self.centralwidget)
+        self.showGrid.setGeometry(QtCore.QRect(170, 700, 131, 31))
+        self.showGrid.setObjectName("ShowGrid")
+        self.showGrid.setText("Show Grid")
+
+        self.Run = QtWidgets.QPushButton(self.centralwidget)
+        self.Run.setGeometry(QtCore.QRect(340, 700, 111, 31))
+        self.Run.setObjectName("Run")
+        self.Run.setText("Run")
         
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -140,3 +193,5 @@ class Ui_MainWindow():
 
         self.selected.setText(str(count)+"/"+str(row*column))
 
+    def timeMoved(self):
+        self.timeLabelVal.setText(str(self.time.value()))

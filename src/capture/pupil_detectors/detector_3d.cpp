@@ -5,8 +5,10 @@
     "distutils": {
         "depends": [
             "../../shared_cpp/include/common/types.h",
+            "/home/horacekv/Pupil/pupil/src/capture/pupil_detectors/detect_2d.hpp",
+            "/home/horacekv/Pupil/pupil/src/capture/pupil_detectors/singleeyefitter/EyeModelFitter.h",
+            "/home/horacekv/Pupil/pupil/src/capture/pupil_detectors/singleeyefitter/mathHelper.h",
             "/usr/lib/python3/dist-packages/numpy/core/include/numpy/npy_math.h",
-            "detect_2d.hpp",
             "singleeyefitter/CircleDeviationVariance3D.h",
             "singleeyefitter/CircleEvaluation3D.h",
             "singleeyefitter/CircleGoodness3D.h",
