@@ -19,6 +19,8 @@ class Ui_MainWindow():
         self.Help.setStyleSheet("border-radius: 15px;")
         self.Help.setObjectName("Help")
         self.Help.setText("?")
+
+
    
         self.cameraSettings = QtWidgets.QPushButton(self.centralwidget)
         self.cameraSettings.setGeometry(QtCore.QRect(60, 30, 131, 30))

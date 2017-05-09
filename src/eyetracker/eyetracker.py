@@ -2,9 +2,9 @@ from copy import deepcopy
 from time import sleep
 from math import floor
 
-watch_interval = 10
-watch_threshold = 0.7
-conf_threshold = 0.7
+# watch_interval = 10
+# watch_threshold = 0.7
+# conf_threshold = 0.7
 
 def showEyeCam(self):
     import zmq
@@ -66,7 +66,7 @@ class Eyetracker():
                 elif('calibration.successful' in topic):
                     return True
                         
-    def tileDetection(self,rows,cols):
+    def tileDetection(self,rows,cols, watch_interval, watch_threshold, conf_threshold):
         """
         cols = columns of image grid
         rows = rows of image grid
@@ -79,6 +79,8 @@ class Eyetracker():
         Returns a dictionary with x and y poisitons of the selected tile, starting at
         the top left corner with [0,0].
         """
+        watch_threshold /= 100
+        conf_threshold /= 100
         import zmq
         import zmq_tools
         ctx = zmq.Context()

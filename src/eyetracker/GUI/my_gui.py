@@ -17,6 +17,7 @@ from multiprocessing import Process
 from threading import Thread
 import os
 from PyQt5.Qt import QDir
+from PyQt5.QtCore import Qt
 
 class MyWindow():
 
@@ -52,6 +53,7 @@ class MyWindow():
         ui.Help.clicked.connect(self.runHelp)
         ui.cameraSettings.clicked.connect(self.runCameraSettings)
         ui.showGrid.clicked.connect(self.runShowGrid)
+        self.ui = ui
         for i in range(len(ui.fieldChecks)):
             ui.fieldChecks[i].stateChanged.connect(self.countSelected)
         sys.exit(self.app.exec_())
@@ -63,9 +65,10 @@ class MyWindow():
         alert.setText("Guick guide\n"
                         + "1) Set camera for your eye\n"
                         + "2) Run calibration\n"
-                        + "3) Select grid and apropriate amount of pictures\n"
-                        + "4) Click Run button for showing fullscreen grid\n"
-                        + "5) On grid click run to start tile detection\n"
+                        + "3) Choose parameters, which suits you best\n"
+                        + "4) Select grid and apropriate amount of pictures\n"
+                        + "5) Click Run button for showing fullscreen grid, detection begins automaticly\n"
+                        + "6) For exit push Esc on your keyboard\n"
                         + "\nIf camera doesn't show your eye or calibration doesn't start reconect EyeTracker.\n"
                         + "If there is still problem after reconnecting, please restart your computer and hope for the best.")
         alert.open()
@@ -112,10 +115,15 @@ class MyWindow():
                     screen = QtWidgets.QDesktopWidget().screenGeometry()
                     run_ui = Ui_RunWindow()
                     run_ui.setupUi(RunWindow, row, column, pictures, self.pictureSource, screen) ##rows, cols, field
-
+                    RunWindow.keyPressEvent=self.runExit
+                    
+                    
                     #Process(target=RunWindow.showFullScreen,name="window",).start()
                     RunWindow.showFullScreen()
-                    RunWindow.repaint()
+                    
+                    Thread(target=self.runTileProcess,name="tileDetect",args=(row,column)).start()
+                    
+                    #RunWindow.repaint()
                 else:
                     global alert
                     alert = QMessageBox()
@@ -129,16 +137,18 @@ class MyWindow():
                 alert.setText("Camera was not calibrated, please run Calibration.")
                 alert.setIcon(QMessageBox.Warning)
                 alert.exec()
+            
+            
     
     def runTileProcess(self,rows,cols):
         self.runWin = True
         while self.runWin:
-            tile = self.eyetracker_obj.tileDetection(rows,cols)
+            tile = self.eyetracker_obj.tileDetection(rows,cols,self.ui.time.value(),self.ui.percent.value(),self.ui.conf.value())
             if tile == None:
-                #TODO pořešit failnutej detect
+                self.runWin = False
                 print("failed")
             else:
-                #Process(target=self.highlight,name="highlightTile",args=(tile['x'], tile['y'])).start()
+                #Thread(target=self.highlight,name="highlightTile",args=(tile['x'], tile['y'])).start()
                 self.highlight(tile['x'], tile['y'])
             #sleep(0.01)
 
@@ -149,17 +159,20 @@ class MyWindow():
         #MainWindow.close()
 
     def runUiShowGridExit(self):
-            ShowGridWindow.close()
+        ShowGridWindow.close()
 
     def highlight(self, x, y):
-        print(x," ",y)
         global RunWindow
+        #if(self.runWin):
         global run_ui
+        #Thread(target=run_ui.highlightPic,args=(x, y, RunWindow)).start()
         run_ui.highlightPic(x, y)
         #RunWindow.repaint()
+        #Thread(target=RunWindow.repaint).start()
         sleep(2)
         run_ui.unHighlightPic(x, y)
         #RunWindow.repaint()
+        #Thread(target=run_ui.unHighlightPic,args=(x, y, RunWindow)).start()
 
 
     def runAddPictures(self):
@@ -168,11 +181,17 @@ class MyWindow():
             dlg.setWindowTitle("Add pictures")
             src = str(dlg.getOpenFileName()[0])
             if len(src)!=0:
-                filename = src.split("/")
-                dst = os.path.dirname(os.path.abspath(__file__))+ "/pics/"+filename[len(filename)-1]
-                copyfile(src, dst)
-                ui.galery()
-                MainWindow.repaint()
+                suffix = src.rsplit('.', 1)[1]
+                formats = ['png', 'jpg', 'bmp', 'jpeg']
+                if suffix in formats:
+                    filename = src.split("/")
+                    dst = os.path.dirname(os.path.abspath(__file__))+ "/pics/"+filename[len(filename)-1]
+                    copyfile(src, dst)
+                    ui.galery()
+                    for i in range(len(ui.fieldChecks)):
+                        ui.fieldChecks[i].stateChanged.connect(self.countSelected)
+                        ui.countSelected()
+            
 
     def runCalibration(self):     
         global isCalibrated
@@ -187,6 +206,14 @@ class MyWindow():
 
     def runCameraSettings(self):
         self.eyetracker_obj.showEyeCam()
+        
+    def runExit(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.runWin = False
+            global RunWindow
+            RunWindow.close()
+            RunWindow = None
+
         
 
     def savePictures(self):

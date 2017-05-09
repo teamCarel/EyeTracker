@@ -35,8 +35,8 @@ class Ui_RunWindow():
                 
 
 
-                scalex = (screen.width()/column)/(pixmap.width()+10)
-                scaley = (screen.height()/row)/(pixmap.height()+10)
+                scalex = (screen.width()/column)/(pixmap.width()+30)
+                scaley = (screen.height()/row)/(pixmap.height()+30)
                 pixmap = pixmap.scaled(pixmap.width()*scalex,pixmap.height()*scaley,QtCore.Qt.IgnoreAspectRatio, QtCore.Qt.FastTransformation)
                 
                 label = QtWidgets.QLabel(self.centralwidget)
@@ -44,6 +44,7 @@ class Ui_RunWindow():
                 label.setText("")
                 label.setPixmap(pixmap)
                 label.setObjectName("Pic")
+                label.setMargin(10)
                 self.field[len(self.field)-1] = label
                 self.gridLayout.addWidget(label, i, j, 1, 1, QtCore.Qt.AlignCenter)
         
@@ -51,8 +52,12 @@ class Ui_RunWindow():
         QtCore.QMetaObject.connectSlotsByName(RunWindow)
 
     def highlightPic(self, col, row):
-        print(col+row*self.column)
-        self.field[col+row*self.column].setStyleSheet("background-color: green")
+        try:
+            self.field[col+row*self.column].setStyleSheet("background-color: green")
+        except RuntimeError:
+            pass
     def unHighlightPic(self, col, row):
-        self.field[col+row*self.column].setStyleSheet("background-color: transparent")
-        
+        try:
+            self.field[col+row*self.column].setStyleSheet("background-color: transparent")
+        except RuntimeError:
+            pass
