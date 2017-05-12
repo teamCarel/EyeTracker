@@ -11,6 +11,8 @@ sys.path.append(shared_modules_base)
 sys.path.append(os.path.join(shared_modules_base, 'gl_utils'))
 sys.path.append(os.path.join(shared_modules_base, 'calibration_routines'))
 sys.path.append(os.path.join(shared_modules_base, 'calibration_routines', 'optimization_calibration'))
+sys.path.append(os.path.join(shared_modules_base, 'math_helper'))
+sys.path.append(os.path.join(shared_modules_base, 'video_capture'))
 
 sys.path.append(eyetracker_base)
 sys.path.append(os.path.join(eyetracker_base, 'GUI'))
