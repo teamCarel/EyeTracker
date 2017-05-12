@@ -32,13 +32,19 @@ class MyWindow():
         global isCalibrated
         global pictures
         self.runWin = True
-        self.pictureSource = os.path.dirname(os.path.abspath(__file__))+ "/pics/"
+        if getattr(sys, 'frozen', False):
+            self.pictureSource  = os.path.dirname(sys.executable)+ "/pics/"
+        else:
+            self.pictureSource = os.path.dirname(os.path.abspath(__file__))+ "/pics/"
         #runWin = False
         pictures = []
         self.app = QtWidgets.QApplication(sys.argv)
         MainWindow = QtWidgets.QMainWindow()
         ui = Ui_MainWindow()
-        isCalibrated = os.path.isfile(os.path.dirname(os.path.abspath(__file__)).rsplit('src', 1)[0]+"eyetracker_settings/user_calibration_data")
+        if getattr(sys, 'frozen', False):
+           isCalibrated = os.path.dirname(sys.executable).rsplit('src', 1)[0]+"eyetracker_settings/user_calibration_data"
+        else:
+            isCalibrated = os.path.isfile(os.path.dirname(os.path.abspath(__file__)).rsplit('src', 1)[0]+"eyetracker_settings/user_calibration_data")
         #isCalibrated = False
         ui.setupUi(MainWindow, self.pictureSource)
         run = ui.Run.clicked.connect(self.runRun)

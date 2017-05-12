@@ -57,7 +57,11 @@ if getattr(sys, 'frozen', False):
         filename = 'glfw3.dll'
     else:
         filename = 'libglfw.dll'
-    dll_path = os.path.join(sys._MEIPASS,filename)
+    try:
+        dll_path = os.path.join(sys._MEIPASS,filename)
+    except Exception: # Monkey patch MEIPASS nto working
+        if os_name == "Windows": dll_path = find_library('glfw3')
+        else:  dll_path = find_library('glfw')
 
 else:
     # we are running in a normal Python environment

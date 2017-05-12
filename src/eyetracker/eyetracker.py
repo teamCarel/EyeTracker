@@ -120,7 +120,6 @@ class Eyetracker():
                             selected_len = len(tile_dict[i])
                     if(selected_tile != None):
                         arr = selected_tile.split(':')
-                        print(selected_tile)
                         return {'x':int(arr[0]),'y':rows-int(arr[1])-1}
                         #return {'x':int(arr[0]),'y':cols-int(arr[1])}
                     tile_dict = tile_dict_new       

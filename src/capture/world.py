@@ -17,7 +17,7 @@ class Global_Container(object):
 
 
 def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
-          ipc_push_url, user_dir, version):
+          ipc_push_url, user_dir):#, version):
     """Reads world video and runs plugins.
 
     Creates a window, gl context.
@@ -80,7 +80,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     # helpers/utils
     from methods import delta_t, get_system_info, timer
     from uvc import get_time_monotonic
-    logger.info('Application Version: {}'.format(version))
+    #logger.info('Application Version: {}'.format(version))
     logger.info('System Info: {}'.format(get_system_info()))
 
     # trigger pupil detector cpp build:
@@ -113,7 +113,7 @@ def world(timebase, eyes_are_alive, ipc_pub_url, ipc_sub_url,
     g_pool.app = 'capture'
     g_pool.process = 'world'
     g_pool.user_dir = user_dir
-    g_pool.version = version
+    #g_pool.version = version
     g_pool.timebase = timebase
     g_pool.zmq_ctx = zmq_ctx
     g_pool.ipc_pub = ipc_pub

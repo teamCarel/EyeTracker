@@ -13,8 +13,12 @@ import os, sys, platform
 
 
 app = 'eyetracker'
-pupil_base_dir = os.path.abspath(__file__).rsplit('src', 1)[0]
-sys.path.append(os.path.join(pupil_base_dir, 'src', 'shared_modules', "eyetracker"))
+if getattr(sys, 'frozen', False):
+    pupil_base_dir = os.path.dirname(sys.executable)
+else:
+    pupil_base_dir = os.path.abspath(__file__).rsplit('src', 1)[0]
+    sys.path.append(os.path.join(pupil_base_dir, 'src', 'shared_modules'))
+    sys.path.append(os.path.join(pupil_base_dir, 'src', "eyetracker"))
 # Specifiy user dir.
 user_dir = os.path.join(pupil_base_dir,'{}_settings'.format(app))
 version_file = None
@@ -29,8 +33,8 @@ if not os.path.isdir(plugin_dir):
     os.mkdir(plugin_dir)
 
 #app version
-from version_utils import get_version
-app_version = get_version(version_file)
+# from version_utils import get_version
+# app_version = get_version(version_file)
 
 #threading and processing
 from multiprocessing import Process, Value,active_children,freeze_support,set_start_method
@@ -186,7 +190,7 @@ def launcher():
                   ipc_sub_url,
                   ipc_push_url,
                   user_dir,
-                  app_version,
+                  #app_version,
                   )).start()
                   
                   
@@ -204,7 +208,7 @@ def launcher():
                             ipc_sub_url,
                             ipc_push_url,
                             user_dir,
-                            app_version,
+                            #app_version,
                             eye_id
                             )).start()
             elif "notify.launcher_process.should_stop" in topic:

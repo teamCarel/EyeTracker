@@ -42,7 +42,7 @@ class Is_Alive_Manager(object):
 
 
 def eye(timebase, is_alive_flag, ipc_pub_url, ipc_sub_url, ipc_push_url,
-        user_dir, version, eye_id, overwrite_cap_settings=None):
+        user_dir, eye_id, overwrite_cap_settings=None): # version after userdir
     """reads eye video and detects the pupil.
 
     Creates a window, gl context.
@@ -132,7 +132,7 @@ def eye(timebase, is_alive_flag, ipc_pub_url, ipc_sub_url, ipc_push_url,
 
         # make some constants avaiable
         g_pool.user_dir = user_dir
-        g_pool.version = version
+        #g_pool.version = version
         g_pool.app = 'capture'
         g_pool.process = 'eye{}'.format(eye_id)
         g_pool.timebase = timebase
@@ -449,7 +449,7 @@ def eye(timebase, is_alive_flag, ipc_pub_url, ipc_sub_url, ipc_push_url,
         session_settings['capture_manager_settings'] = g_pool.capture_manager.class_name, g_pool.capture_manager.get_init_dict()
         session_settings['window_size'] = glfw.glfwGetWindowSize(main_window)
         session_settings['window_position'] = glfw.glfwGetWindowPos(main_window)
-        session_settings['version'] = g_pool.version
+        #session_settings['version'] = g_pool.version
         session_settings['last_pupil_detector'] = g_pool.pupil_detector.__class__.__name__
         session_settings['pupil_detector_settings'] = g_pool.pupil_detector.get_settings()
         session_settings.close()
