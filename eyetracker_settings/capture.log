@@ -1,42 +1,34 @@
-2017-05-12 12:29:48,237 - MainProcess - [INFO] os_utils: Disabling idle sleep not supported on this OS version.
-2017-05-12 12:29:48,537 - world - [INFO] world: System Info: User: horacekv, Platform: Linux, Machine: horacekv-GE72-2QC, Release: 4.8.0-45-generic, Version: #48~16.04.1-Ubuntu SMP Fri Mar 24 12:46:56 UTC 2017
-2017-05-12 12:29:48,538 - world - [INFO] pupil_detectors.build: Building extention modules...
-2017-05-12 12:29:48,867 - world - [INFO] calibration_routines.optimization_calibration.build: Building extention modules...
-2017-05-12 12:29:50,597 - world - [INFO] plugin: Loaded: UVC_Source
-2017-05-12 12:29:50,598 - world - [INFO] plugin: Loaded: Pupil_Data_Relay
-2017-05-12 12:29:50,598 - world - [INFO] plugin: Loaded: Dummy_Gaze_Mapper
-2017-05-12 12:29:50,599 - world - [INFO] plugin: Loaded: Screen_Marker_Calibration
-2017-05-12 12:29:50,600 - world - [INFO] plugin: Loaded: Pupil_Remote
-2017-05-12 12:29:50,600 - world - [WARNING] world: Process started.
-2017-05-12 12:29:50,953 - eye0 - [INFO] pupil_detectors.build: Building extention modules...
-2017-05-12 12:29:51,727 - world - [WARNING] plugin: Pupil_Remote: Update will be deprecated soon. Use 'recent_events instead.'
-2017-05-12 12:29:51,727 - world - [WARNING] plugin: Dummy_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
-2017-05-12 12:29:51,809 - eye0 - [WARNING] eye: Process started.
-2017-05-12 12:30:17,576 - world - [INFO] calibration_routines.screen_marker_calibration: Starting Calibration
-2017-05-12 12:30:30,817 - world - [INFO] calibration_routines.screen_marker_calibration: Stopping Calibration
-2017-05-12 12:30:30,818 - world - [INFO] calibration_routines.camera_intrinsics_estimation: Loaded pre recorded calibration for Pupil Cam1 ID2@(1280, 720).
-2017-05-12 12:30:30,820 - world - [INFO] calibration_routines.finish_calibration: Collected 78 monocular calibration data.
-2017-05-12 12:30:30,820 - world - [INFO] calibration_routines.finish_calibration: Collected 0 binocular calibration data.
-2017-05-12 12:30:30,884 - world - [INFO] plugin: Loaded: Vector_Gaze_Mapper
-2017-05-12 12:30:30,896 - world - [WARNING] plugin: Vector_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
-2017-05-12 12:31:26,333 - world - [INFO] calibration_routines.screen_marker_calibration: Starting Calibration
-2017-05-12 12:31:45,343 - world - [INFO] calibration_routines.screen_marker_calibration: Stopping Calibration
-2017-05-12 12:31:45,343 - world - [INFO] calibration_routines.camera_intrinsics_estimation: Loaded pre recorded calibration for Pupil Cam1 ID2@(1280, 720).
-2017-05-12 12:31:45,346 - world - [INFO] calibration_routines.finish_calibration: Collected 153 monocular calibration data.
-2017-05-12 12:31:45,346 - world - [INFO] calibration_routines.finish_calibration: Collected 0 binocular calibration data.
-2017-05-12 12:31:45,459 - world - [INFO] plugin: Loaded: Vector_Gaze_Mapper
-2017-05-12 12:31:45,487 - world - [WARNING] plugin: Vector_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
-2017-05-12 12:31:47,347 - world - [INFO] calibration_routines.screen_marker_calibration: Starting Calibration
-2017-05-12 12:31:59,382 - world - [INFO] calibration_routines.screen_marker_calibration: Stopping Calibration
-2017-05-12 12:31:59,383 - world - [INFO] calibration_routines.camera_intrinsics_estimation: Loaded pre recorded calibration for Pupil Cam1 ID2@(1280, 720).
-2017-05-12 12:31:59,386 - world - [INFO] calibration_routines.finish_calibration: Collected 156 monocular calibration data.
-2017-05-12 12:31:59,386 - world - [INFO] calibration_routines.finish_calibration: Collected 0 binocular calibration data.
-2017-05-12 12:31:59,489 - world - [INFO] plugin: Loaded: Vector_Gaze_Mapper
-2017-05-12 12:31:59,510 - world - [WARNING] plugin: Vector_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
-2017-05-12 12:33:38,060 - world - [INFO] calibration_routines.screen_marker_calibration: Starting Calibration
-2017-05-12 12:33:50,467 - world - [INFO] calibration_routines.screen_marker_calibration: Stopping Calibration
-2017-05-12 12:33:50,468 - world - [INFO] calibration_routines.camera_intrinsics_estimation: Loaded pre recorded calibration for Pupil Cam1 ID2@(1280, 720).
-2017-05-12 12:33:50,471 - world - [INFO] calibration_routines.finish_calibration: Collected 195 monocular calibration data.
-2017-05-12 12:33:50,471 - world - [INFO] calibration_routines.finish_calibration: Collected 0 binocular calibration data.
-2017-05-12 12:33:50,598 - world - [INFO] plugin: Loaded: Vector_Gaze_Mapper
-2017-05-12 12:33:50,628 - world - [WARNING] plugin: Vector_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
+2017-05-15 17:05:45,013 - MainProcess - [INFO] os_utils: Disabling idle sleep not supported on this OS version.
+2017-05-15 17:05:46,879 - world - [INFO] world: System Info: User: horacekv, Platform: Linux, Machine: horacekv-GE72-2QC, Release: 4.8.0-45-generic, Version: #48~16.04.1-Ubuntu SMP Fri Mar 24 12:46:56 UTC 2017
+2017-05-15 17:05:46,922 - world - [INFO] pupil_detectors.build: Building extention modules...
+2017-05-15 17:05:49,615 - world - [INFO] calibration_routines.optimization_calibration.build: Building extention modules...
+2017-05-15 17:05:55,350 - world - [ERROR] video_capture.uvc_backend: Init failed. Capture is started in ghost mode. No images will be supplied.
+2017-05-15 17:05:55,363 - world - [INFO] plugin: Loaded: UVC_Source
+2017-05-15 17:05:55,364 - world - [INFO] plugin: Loaded: Pupil_Data_Relay
+2017-05-15 17:05:55,364 - world - [INFO] plugin: Loaded: Dummy_Gaze_Mapper
+2017-05-15 17:05:55,376 - world - [INFO] plugin: Loaded: Screen_Marker_Calibration
+2017-05-15 17:05:55,377 - world - [INFO] plugin: Loaded: Pupil_Remote
+2017-05-15 17:05:55,377 - world - [WARNING] world: Process started.
+2017-05-15 17:05:56,432 - world - [WARNING] plugin: Pupil_Remote: Update will be deprecated soon. Use 'recent_events instead.'
+2017-05-15 17:05:56,437 - world - [WARNING] plugin: Dummy_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
+2017-05-15 17:05:56,697 - eye0 - [INFO] pupil_detectors.build: Building extention modules...
+2017-05-15 17:05:58,258 - eye0 - [ERROR] video_capture.uvc_backend: Init failed. Capture is started in ghost mode. No images will be supplied.
+2017-05-15 17:05:58,997 - eye0 - [WARNING] eye: Process started.
+2017-05-15 17:06:07,398 - world - [INFO] video_capture.uvc_backend: Found device. Pupil Cam1 ID2.
+2017-05-15 17:06:09,510 - eye0 - [INFO] video_capture.uvc_backend: Found device. Pupil Cam1 ID0.
+2017-05-15 17:06:32,159 - world - [INFO] calibration_routines.screen_marker_calibration: Starting Calibration
+2017-05-15 17:06:44,163 - world - [INFO] calibration_routines.screen_marker_calibration: Stopping Calibration
+2017-05-15 17:06:44,169 - world - [INFO] calibration_routines.camera_intrinsics_estimation: Loaded pre recorded calibration for Pupil Cam1 ID2@(1280, 720).
+2017-05-15 17:06:44,171 - world - [INFO] calibration_routines.finish_calibration: Collected 156 monocular calibration data.
+2017-05-15 17:06:44,171 - world - [INFO] calibration_routines.finish_calibration: Collected 0 binocular calibration data.
+2017-05-15 17:06:44,331 - world - [INFO] plugin: Loaded: Vector_Gaze_Mapper
+2017-05-15 17:06:44,362 - world - [WARNING] plugin: Vector_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
+2017-05-15 17:08:39,735 - world - [INFO] calibration_routines.screen_marker_calibration: Starting Calibration
+2017-05-15 17:08:51,703 - world - [INFO] calibration_routines.screen_marker_calibration: Stopping Calibration
+2017-05-15 17:08:51,704 - world - [INFO] calibration_routines.camera_intrinsics_estimation: Loaded pre recorded calibration for Pupil Cam1 ID2@(1280, 720).
+2017-05-15 17:08:51,706 - world - [INFO] calibration_routines.finish_calibration: Collected 122 monocular calibration data.
+2017-05-15 17:08:51,706 - world - [INFO] calibration_routines.finish_calibration: Collected 0 binocular calibration data.
+2017-05-15 17:08:51,798 - world - [INFO] plugin: Loaded: Vector_Gaze_Mapper
+2017-05-15 17:08:51,816 - world - [WARNING] plugin: Vector_Gaze_Mapper: Update will be deprecated soon. Use 'recent_events instead.'
+2017-05-15 17:10:38,126 - world - [INFO] world: Process shutting down.
+2017-05-15 17:10:38,496 - eye0 - [INFO] eye: Process shutting down.

@@ -165,6 +165,8 @@ class MyWindow():
         #MainWindow.close()
 
     def runUiShowGridExit(self):
+        global MainWindow
+        MainWindow.show()
         ShowGridWindow.close()
 
     def highlight(self, x, y):
@@ -232,18 +234,24 @@ class MyWindow():
         alert.setIcon(QMessageBox.Information)
         alert.exec()
 
+    def closeGridEvent(self, event):
+        self.runUiShowGridExit()
+            
     def runShowGrid(self):
         global ShowGridWindow
         global show_grid_ui
         ShowGridWindow = QtWidgets.QMainWindow()
         show_grid_ui = Ui_ShowGridWindow()
         resolution = self.getResolution()
+        ShowGridWindow.closeEvent = self.closeGridEvent
     
         if((int(resolution[0])*int(resolution[2])) == len(pictures)):
             show_grid_ui.setupUi(ShowGridWindow, int(resolution[0]), int(resolution[2]), pictures, self.pictureSource) ##rows, cols, field
             show_grid_ui.Exit.clicked.connect(self.runUiShowGridExit)
             show_grid_ui.Save.clicked.connect(self.savePictures)
             ShowGridWindow.show()
+            global MainWindow
+            MainWindow.hide()
         else:
             alert = QMessageBox()
             alert.setWindowTitle("Wrong number of pictures.")

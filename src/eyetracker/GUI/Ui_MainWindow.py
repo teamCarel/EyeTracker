@@ -47,7 +47,7 @@ class Ui_MainWindow():
         self.time.valueChanged.connect(self.timeMoved)
         
         self.timeLabelVal = QtWidgets.QLabel(self.centralwidget)
-        self.timeLabelVal.setGeometry(QtCore.QRect(180,70,70,31))
+        self.timeLabelVal.setGeometry(QtCore.QRect(170,70,20,31))
         self.timeLabelVal.setFont(font)
         self.timeLabelVal.setText(str(self.time.value()))
                 
@@ -66,7 +66,7 @@ class Ui_MainWindow():
         self.percent.valueChanged.connect(self.percentMoved)
         
         self.percentLabelVal = QtWidgets.QLabel(self.centralwidget)
-        self.percentLabelVal.setGeometry(QtCore.QRect(180,120,70,31))
+        self.percentLabelVal.setGeometry(QtCore.QRect(170,120,30,31))
         self.percentLabelVal.setFont(font)
         self.percentLabelVal.setText(str(self.percent.value()))
         
@@ -85,7 +85,7 @@ class Ui_MainWindow():
         self.conf.valueChanged.connect(self.confMoved)
         
         self.confLabelVal = QtWidgets.QLabel(self.centralwidget)
-        self.confLabelVal.setGeometry(QtCore.QRect(180,160,70,31))
+        self.confLabelVal.setGeometry(QtCore.QRect(170,160,30,31))
         self.confLabelVal.setFont(font)
         self.confLabelVal.setText(str(self.conf.value()))
         
