@@ -16,7 +16,7 @@ The application can be launched directly from source code (provided all dependen
 
 ### From the build
 
-On ubuntu you can also launch from the prebuilt [/build/exe.linux-x86_64-3.5/main](../build/exe.linux-x86_64-3.5/main). The application still needs to be launched with administrator privileges.
+On Ubuntu you can also launch from the prebuilt [/build/exe.linux-x86_64-3.5/main](./build/exe.linux-x86_64-3.5/main). The application still needs to be launched with administrator privileges.
 
 ## Building the application
 
@@ -25,7 +25,7 @@ The application can be built from the root ofthe repository using ```python setu
 ## Source structure
 
 Eyetracker source code is structured into multiple source subfolders:
-* [src/capture](../src/capture) for the pupil capture app running in background,
-* [src/eyetracker](../src/exetracker) for the main eyetracker algorithm and GUI,
-* [src/shared_cpp](../src/shared_cpp) for C++ background modules,
-* [src/shared_modules](../src/shared_modules) for shared modules used by pupil.
+* [src/capture](./src/capture) for the pupil capture app running in background,
+* [src/eyetracker](./src/exetracker) for the main eyetracker algorithm and GUI,
+* [src/shared_cpp](./src/shared_cpp) for C++ background modules,
+* [src/shared_modules](./src/shared_modules) for shared modules used by pupil.
