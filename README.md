@@ -21,7 +21,7 @@ On Ubuntu you can also launch from the prebuilt [/build/exe.linux-x86_64-3.5/mai
 
 ## Building the application
 
-The application can be built from the root ofthe repository using ```python setup.py build```.
+The application can be built from the root of the repository using ```python setup.py build```.
 
 ## Source structure
 
