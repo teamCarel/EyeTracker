@@ -5,14 +5,14 @@ The application is 100% working on Ubuntu 16.04. Windows and MacOS are theoretic
 
 ## Dependencies
 
-Eyetracker requires the same dependencies as described in https://docs.pupil-labs.com/#developer-setup. Follow the dependency setup for OS of your choosing. You also need to install [PyQt](5https://sourceforge.net/projects/pyqt/) for our GUI. Easiest way to do so is using pip:
-```pip3 install pyqt5```.
+Eyetracker requires the same dependencies as described in https://docs.pupil-labs.com/#developer-setup. Follow the dependency setup for OS of your choosing. You also need to install [PyQt](5https://sourceforge.net/projects/pyqt/) for our GUI. 
+Easiest way to do so is using pip: ```pip3 install pyqt5```.
 
 ## Launching the application
 
 ### From source
 
-The application can be launched directly from source code (provided all dependencies are installed) by launching [/src/capture/main.py](../src/capture/main.py) as administrator. (using command ```python main.py``` from elevated command prompt on Windows or ```sudo python3 main.py``` on Ubuntu).
+The application can be launched directly from source code (provided all dependencies are installed) by launching [/src/capture/main.py](./src/capture/main.py) as administrator. (using command ```python main.py``` from elevated command prompt on Windows or ```sudo python3 main.py``` on Ubuntu).
 
 ### From the build
 
