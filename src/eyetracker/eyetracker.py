@@ -2,17 +2,6 @@ from copy import deepcopy
 from time import sleep
 from math import floor
 
-# watch_interval = 10
-# watch_threshold = 0.7
-# conf_threshold = 0.7
-
-def showEyeCam(self):
-    import zmq
-    import zmq_tools
-    ctx = zmq.Context()
-    ipc_pub = zmq_tools.Msg_Dispatcher(ctx, self.ipc_push_url)
-    ipc_pub.notify({'subject':'show_eye_cam'})
-
 class Eyetracker():
     #TODO documentation
 
