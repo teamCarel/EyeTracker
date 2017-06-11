@@ -1,17 +1,23 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import glob
-
+"""
+Template for fullscreen screen with grid
+setting all components
+"""
 class Ui_RunWindow():
-
+    """
+    event filtr whitch catches ESC button and closes the window
+    """
     def eventFilter(self, obj, event):
         if event.type() == QEvent.KeyPress:
             if event.key() == Qt.Key_Escape:
                 self.close()
         return super(MyMainWindow, self).eventFilter(obj, event)
 
-
+    """"
+    setting content 
+    """
     def setupUi(self, RunWindow, row, column, pictures, pictureSource, screen):
-        
         self.pictureSource=pictureSource
         self.row=row
         self.column=column
@@ -21,6 +27,9 @@ class Ui_RunWindow():
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
 
+        """
+        grid with pictures
+        """
         i = 0
         j = 0
         source = []
@@ -51,11 +60,17 @@ class Ui_RunWindow():
         RunWindow.setCentralWidget(self.centralwidget)
         QtCore.QMetaObject.connectSlotsByName(RunWindow)
 
+    """
+    creates green border around selected picture
+    """
     def highlightPic(self, col, row):
         try:
             self.field[col+row*self.column].setStyleSheet("background-color: green")
         except RuntimeError:
             pass
+    """
+    disables all borders around selected picture
+    """
     def unHighlightPic(self, col, row):
         try:
             self.field[col+row*self.column].setStyleSheet("background-color: transparent")

@@ -2,8 +2,19 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import glob, os
 
+""""
+Template for Main Window
+setting all components
+"""
 class Ui_MainWindow():
+
+    """"
+    setting content 
+    """
     def setupUi(self, MainWindow, pictureSource):
+        """
+        parameters of window
+        """
         self.pictureSource=pictureSource
         MainWindow.setObjectName("MainWindow")
         MainWindow.setFixedSize(471, 740)
@@ -14,24 +25,34 @@ class Ui_MainWindow():
         font = QtGui.QFont()
         font.setPointSize(12)
         
+        """
+        Help button in top right corner
+        """
         self.Help = QtWidgets.QPushButton(self.centralwidget)
         self.Help.setGeometry(QtCore.QRect(430, 10, 30, 30))
         self.Help.setStyleSheet("border-radius: 15px;")
         self.Help.setObjectName("Help")
         self.Help.setText("?")
 
-
-   
+        """"
+        Camera Setting button
+        """"
         self.cameraSettings = QtWidgets.QPushButton(self.centralwidget)
         self.cameraSettings.setGeometry(QtCore.QRect(60, 30, 131, 30))
         self.cameraSettings.setObjectName("cameraSettings")
         self.cameraSettings.setText("Camera Settings")
 
+        """"
+        Calibration button
+        """
         self.calibration = QtWidgets.QPushButton(self.centralwidget)
         self.calibration.setGeometry(QtCore.QRect(260, 30, 131, 30))
         self.calibration.setObjectName("calibration")
         self.calibration.setText("Calibration")
         
+        """"
+        line with capture time settings, contains label with title, slidebar with default value 3, label whitch show current value
+        """
         self.timeLabel = QtWidgets.QLabel(self.centralwidget)
         self.timeLabel.setGeometry(QtCore.QRect(20, 70, 131, 31))
         self.timeLabel.setFont(font)
@@ -50,7 +71,11 @@ class Ui_MainWindow():
         self.timeLabelVal.setGeometry(QtCore.QRect(170,70,20,31))
         self.timeLabelVal.setFont(font)
         self.timeLabelVal.setText(str(self.time.value()))
+
                 
+        """"
+        line with Capture percent settings, contains label with title, slidebar with default value 80, label whitch show current value
+        """    
         self.percentLabel = QtWidgets.QLabel(self.centralwidget)
         self.percentLabel.setGeometry(QtCore.QRect(20, 120, 150, 31))
         self.percentLabel.setFont(font)
@@ -70,6 +95,10 @@ class Ui_MainWindow():
         self.percentLabelVal.setFont(font)
         self.percentLabelVal.setText(str(self.percent.value()))
         
+                
+        """"
+        line with confidency settings, contains label with title, slidebar with default value 90, label whitch show current value
+        """
         self.confLabel = QtWidgets.QLabel(self.centralwidget)
         self.confLabel.setGeometry(QtCore.QRect(20, 160, 131, 31))
         self.confLabel.setFont(font)
@@ -89,6 +118,9 @@ class Ui_MainWindow():
         self.confLabelVal.setFont(font)
         self.confLabelVal.setText(str(self.conf.value()))
         
+        """
+        combobox, where user setts size of the grid
+        """
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(20, 200, 51, 16))
         self.label.setFont(font)
@@ -104,6 +136,9 @@ class Ui_MainWindow():
         self.comboBox.addItem("4x4")
         self.comboBox.currentIndexChanged.connect(self.countSelected)  
 
+        """
+        two label title and value, whitch shows number of selected pictures relative to selected grid size
+        """
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(20, 240, 71, 16))
         font = QtGui.QFont()
@@ -118,12 +153,17 @@ class Ui_MainWindow():
         self.selected.setFont(font)
         self.selected.setObjectName("selected")
         
-
+        """
+        button whitch shows filebrowser for adding pictures to galery
+        """
         self.addPictures = QtWidgets.QPushButton(self.centralwidget)
         self.addPictures.setGeometry(QtCore.QRect(330, 240, 131, 31))
         self.addPictures.setObjectName("addPictures")
         self.addPictures.setText("Add pictures")
 
+        """
+        scrolable area with galery
+        """
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea.setGeometry(QtCore.QRect(10, 280, 451, 405))
         self.scrollArea.setWidgetResizable(True)
@@ -132,33 +172,44 @@ class Ui_MainWindow():
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 3418, 422))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.setContentsMargins(5, 5, 5, 5)
         self.gridLayout.setObjectName("gridLayout")
-
         self.galery()
         
-        
+        """
+        Exit button whitch closes everything and stops the process
+        """
         self.Exit = QtWidgets.QPushButton(self.centralwidget)
         self.Exit.setGeometry(QtCore.QRect(10, 700, 111, 31))
         self.Exit.setObjectName("Exit")
         self.Exit.setText("Exit")
         self.Exit.clicked.connect(QtWidgets.QApplication.closeAllWindows)
 
+        """
+        Button whitch shows settings of position pictures in grid
+        """
         self.showGrid = QtWidgets.QPushButton(self.centralwidget)
         self.showGrid.setGeometry(QtCore.QRect(170, 700, 131, 31))
         self.showGrid.setObjectName("ShowGrid")
         self.showGrid.setText("Show Grid")
 
+        """
+        Button whitch runs tile detection and shows fullscreen grid
+        """
         self.Run = QtWidgets.QPushButton(self.centralwidget)
         self.Run.setGeometry(QtCore.QRect(340, 700, 111, 31))
         self.Run.setObjectName("Run")
         self.Run.setText("Run")
         
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         MainWindow.setCentralWidget(self.centralwidget)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    """
+    content of scrollable area
+    gets all pictures with supported format and shows them in grid layout with checkboxes in bottom left corner
+    """
     def galery(self):
         i = 0
         self.fieldPics = []
@@ -189,8 +240,11 @@ class Ui_MainWindow():
             self.gridLayout.addWidget( self.fieldChecks[i], i%3, i/3, 1, 1, QtCore.Qt.AlignBottom)
 
             i=i+1
-
-
+    
+    """
+    cycle gets through array of checkboxes in galery and counts all selected
+    method returns string in format "selected checks"+"/"+"selected grid size"
+    """
     def countSelected(self):
         resolution = (str(self.comboBox.currentText())).partition('x')
         row = int(resolution[0])
@@ -202,6 +256,9 @@ class Ui_MainWindow():
 
         self.selected.setText(str(count)+"/"+str(row*column))
 
+    """
+    sets value from one slidebar to relevant label
+    """
     def timeMoved(self):
         self.timeLabelVal.setText(str(self.time.value()))
         
